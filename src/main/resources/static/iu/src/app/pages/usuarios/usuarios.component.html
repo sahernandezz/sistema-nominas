@@ -1,0 +1,239 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="div-center">
+          <h1 class="text-white font-size-30">Tabla de usuarios</h1>
+        </div>
+
+        <!--        <div class="col-xl-3 col-lg-6">-->
+        <!--          <div class="card card-stats mb-4 mb-xl-0">-->
+        <!--            <div class="card-body">-->
+        <!--              <div class="row">-->
+        <!--                <div class="col">-->
+        <!--                  <h5 class="card-title text-uppercase text-muted mb-0">Traffic</h5>-->
+        <!--                  <span class="h2 font-weight-bold mb-0">350,897</span>-->
+        <!--                </div>-->
+        <!--                <div class="col-auto">-->
+        <!--                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">-->
+        <!--                    <i class="fas fa-chart-bar"></i>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <p class="mt-3 mb-0 text-muted text-sm">-->
+        <!--                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>-->
+        <!--                <span class="text-nowrap">Since last month</span>-->
+        <!--              </p>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!--        <div class="col-xl-3 col-lg-6">-->
+        <!--          <div class="card card-stats mb-4 mb-xl-0">-->
+        <!--            <div class="card-body">-->
+        <!--              <div class="row">-->
+        <!--                <div class="col">-->
+        <!--                  <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>-->
+        <!--                  <span class="h2 font-weight-bold mb-0">2,356</span>-->
+        <!--                </div>-->
+        <!--                <div class="col-auto">-->
+        <!--                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">-->
+        <!--                    <i class="fas fa-chart-pie"></i>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <p class="mt-3 mb-0 text-muted text-sm">-->
+        <!--                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>-->
+        <!--                <span class="text-nowrap">Since last week</span>-->
+        <!--              </p>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!--        <div class="col-xl-3 col-lg-6">-->
+        <!--          <div class="card card-stats mb-4 mb-xl-0">-->
+        <!--            <div class="card-body">-->
+        <!--              <div class="row">-->
+        <!--                <div class="col">-->
+        <!--                  <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>-->
+        <!--                  <span class="h2 font-weight-bold mb-0">924</span>-->
+        <!--                </div>-->
+        <!--                <div class="col-auto">-->
+        <!--                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">-->
+        <!--                    <i class="fas fa-users"></i>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <p class="mt-3 mb-0 text-muted text-sm">-->
+        <!--                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>-->
+        <!--                <span class="text-nowrap">Since yesterday</span>-->
+        <!--              </p>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!--        <div class="col-xl-3 col-lg-6">-->
+        <!--          <div class="card card-stats mb-4 mb-xl-0">-->
+        <!--            <div class="card-body">-->
+        <!--              <div class="row">-->
+        <!--                <div class="col">-->
+        <!--                  <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>-->
+        <!--                  <span class="h2 font-weight-bold mb-0">49,65%</span>-->
+        <!--                </div>-->
+        <!--                <div class="col-auto">-->
+        <!--                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">-->
+        <!--                    <i class="fas fa-percent"></i>-->
+        <!--                  </div>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <p class="mt-3 mb-0 text-muted text-sm">-->
+        <!--                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>-->
+        <!--                <span class="text-nowrap">Since last month</span>-->
+        <!--              </p>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <button class="btn btn-lg btn-outline-primary" (click)="openRegister(content_formulario)">Registrar Usuario
+          </button>
+        </div>
+        <div class="form-group div-buscar" id="form-group_buscar">
+          <div class="input-group input-group-alternative d-flex">
+            <div class="input-group-prepend m-2">
+            </div>
+            <input (keyup)="applyFilter($event)" placeholder="Filtrar" class="form-control">
+          </div>
+        </div>
+
+        <table [dataSource]="this.dataSource" class="" matSort mat-table>
+          <ng-container matColumnDef="Login">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="">Login</th>
+            <td mat-cell *matCellDef="let element">{{element.login}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let element">{{element.nombre}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let element">
+              <span _ngcontent-c14="" class="badge badge-dot mr-4">
+                <i _ngcontent-c14=""
+                   class="{{element.estado === 'A' ? 'bg-success' :'bg-warning'}}"></i> {{element.estado === 'A' ? 'Activo' : 'Inactivo'}} </span>
+
+              <div ngbDropdown placement="bottom-right">
+                <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
+                  <i class="fas fa-ellipsis-v"></i>
+                </a>
+                <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+                  <span *ngIf="element.id !== app.getUsuario().id"
+                        (click)="cambiarEstado(element.id, content_estado, content_mensaje, content_estado_resultado)"
+                        class="dropdown-item">Cambiar estado</span>
+                  <span (click)="openUpdate(content_formulario, element)" class="dropdown-item">Editar</span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content_formulario let-modal>
+  <div class="effect">
+    <div class="modal-header">
+      <h2 class="modal-title">Formulario</h2>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
+    </div>
+    <div class="p-4">
+      <form
+        (submit)="eventoUsuario['estado'] === 'R' ? registrarUsuario($event, content_completado, content_mensaje)
+        : actualizarUsuario($event, content_completado, content_mensaje)">
+        <div class="row">
+          <div class="form-group col-md-6" id="from_group_nombre_usuario">
+            <label for="nombre_usuario">nombre <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="nombre_usuario" placeholder="nombre"
+                   [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['nombre']: ''">
+            <span class="text-red font-size-12" id="text_nombre_usuario"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_login_usuario">
+            <label for="login_usuario">nombre de usuario <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="login_usuario" placeholder="usuario"
+                   [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['login']: ''">
+            <span class="text-red font-size-12" id="text_login_usuario"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_clave_usuario">
+            <label for="clave_usuario">Contraseña <span class="text-red">*</span></label>
+            <input type="password" class="form-control" id="clave_usuario" placeholder="Contraseña">
+            <span class="text-red font-size-12" id="text_clave_usuario"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_confirmar_clave_usuario">
+            <label for="confirmar_clave_usuario">Confirmar contraseña <span class="text-red">*</span></label>
+            <input type="password" class="form-control" id="confirmar_clave_usuario" placeholder="confirmar">
+            <span class="text-red font-size-12" id="text_confirmar_clave_usuario"></span>
+          </div>
+          <div class="form-group col-md-12" id="from_group_permisos">
+            <label for="confirmar_clave_usuario">Permisos <span class="text-red">*</span></label>
+            <select class="form-control" id="permisos">
+              <option value="0">Seleccióne...</option>
+              <option
+                [selected]="eventoUsuario['estado'] === 'U' ? eventoUsuario['usuario']['permisos'][0]['id'] ===  rol.id: false"
+                *ngFor="let rol of dataPermisos" value="{{parse(rol)}}">{{rol.nombre}}</option>
+            </select>
+            <span class="text-red font-size-12" id="text_permisos"></span>
+          </div>
+        </div>
+        <div class="modal-footer col-md-12">
+          <input type="submit" class="btn btn-primary" id="btn_form"
+                 value="{{eventoUsuario['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content_estado let-modal>
+  <div class="p-4 div-buscar d-flex mt-2">
+    <h1 class="text-gray">Cambiando estado...</h1>
+  </div>
+</ng-template>
+
+<ng-template #content_estado_resultado let-modal>
+  <div class="p-4 div-buscar d-flex mt-2">
+    <h1 class="text-gray">{{this.mensaje}}</h1>
+  </div>
+</ng-template>
+
+<ng-template #content_completado let-modal>
+  <div class="p-4 div-buscar d-flex mt-2">
+    <h1 class="text-gray">Usuario {{eventoUsuario['estado'] === 'R' ? 'registrado' : 'actualizado'}}</h1>
+  </div>
+</ng-template>
+
+<ng-template #content_mensaje let-modal>
+  <div class="div-buscar mt-4 ml-4 mr-4">
+    <h1 class="text-gray">{{this.mensaje}}</h1>
+  </div>
+  <div class="div-buscar mb-4 ml-4 mr-4">
+    <button (click)="modal.dismiss('Cross click')" type="button" class="btn btn-outline-default">Cerrar</button>
+  </div>
+</ng-template>

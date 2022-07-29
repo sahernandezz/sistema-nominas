@@ -1,0 +1,62 @@
+<div class="m-0 vh-100 row justify-content-center align-content-center bg-secondary">
+
+  <!-- Page content -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7 ">
+        <div class="card bg-white box-shadow border-0">
+          <div class="card-body px-lg-5 py-lg-5">
+            <div class="d-flex">
+              <i class="ni ni-single-copy-04 text-primary font-size-30"></i>
+              <h2 class="me-0-5 text-muted">{{app.getConfig().title}}</h2>
+            </div>
+            <h1>Iniciar sesión</h1>
+            <div class="text-muted mb-4">
+              <small>Inicia sesión con credenciales</small>
+            </div>
+            <form role="form" (ngSubmit)="datosUsuario()">
+              <div class="form-group mb-3" id="form-group_login_usuario">
+                <div class="input-group input-group-alternative d-flex">
+                  <div class="input-group-prepend m-2 font-size-16">
+                    <span class="input-group-text"><i class="ni ni-single-02 m-0_8"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Nombre de usuario" type="text"
+                         id="input_login_usuario" required>
+                </div>
+              </div>
+              <div class="form-group" id="form-group_clave_usuario">
+                <div class="input-group input-group-alternative d-flex">
+                  <div class="input-group-prepend m-2 font-size-16">
+                    <span class="input-group-text"><i class="ni ni-lock-circle-open m-0_8"></i></span>
+                  </div>
+                  <input class="form-control" placeholder="Contraseña" type="password"
+                         id="input_clave_usuario" required>
+                </div>
+              </div>
+              <!--            <div class="custom-control custom-control-alternative custom-checkbox">-->
+              <!--              <input class="custom-control-input" id=" customCheckLogin" type="checkbox">-->
+              <!--              <label class="custom-control-label" for=" customCheckLogin">-->
+              <!--                <span class="text-muted">Recordarme</span>-->
+              <!--              </label>-->
+              <!--            </div>-->
+              <div *ngIf="!buttonSummit; else load" class="d-flex justify-content-between mt-5">
+                <a class="cursor-pointer text-color-grey text-decoration-none mt-1">
+                  <!--                  <span>¿Olvidó la contraseña?</span></a>-->
+                  <span></span>
+                </a>
+                <div>
+                  <input type="submit" value="Ingresar" class="btn btn-primary">
+                </div>
+              </div>
+              <ng-template #load>
+                <div class="mt-5">
+                  <app-load></app-load>
+                </div>
+              </ng-template>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
