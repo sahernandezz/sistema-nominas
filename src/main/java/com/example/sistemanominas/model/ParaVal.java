@@ -16,18 +16,20 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "registro")
-public class Registro implements Serializable {
+@Table(name = "para_val")
+public class ParaVal implements Serializable {
 
     @Serial
     private final static long serialVersionUID = 32425333132L;
 
+    public static final String ACTIVO = "A";
+
+    public final static String INACTIVO = "I";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     public final static String ENCE = "ENCE";
-
     public final static String ENCD = "ENCD";
 
     public final static String DETE = "DETE";
@@ -58,6 +60,9 @@ public class Registro implements Serializable {
     @Column(name = "expresion_sql", length = 120)
     private String expreSql;
 
+    @Column(name = "estado")
+    private String estado = ACTIVO;
+
     @Override
     public boolean equals(Object o) {
         boolean result;
@@ -66,8 +71,8 @@ public class Registro implements Serializable {
         } else if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             result = false;
         } else {
-            Registro registro = (Registro) o;
-            result = id != null && Objects.equals(id, registro.id);
+            ParaVal paraVal = (ParaVal) o;
+            result = id != null && Objects.equals(id, paraVal.id);
         }
         return result;
     }

@@ -1,8 +1,8 @@
 package com.example.sistemanominas.service;
 
 import com.example.sistemanominas.dto.ObjectDto;
-import com.example.sistemanominas.model.Registro;
-import com.example.sistemanominas.repository.RegistroRepositoryImpl;
+import com.example.sistemanominas.model.ParaVal;
+import com.example.sistemanominas.repository.ParaValRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,32 +10,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegistroServiceImpl {
+public class ParaValServiceImpl {
 
     @Autowired
-    private RegistroRepositoryImpl registroRepository;
+    private ParaValRepositoryImpl registroRepository;
 
-    public List<Registro> listaUsuarios() {
+    public List<ParaVal> listaUsuarios() {
         return this.registroRepository.lista();
     }
 
-    public ObjectDto guardarRegistro(final Registro r) {
+    public ObjectDto guardarRegistro(final ParaVal r) {
         ObjectDto respuesta = null;
 
         if (r.getColumna().matches(".*[0-9].*")) {
-            respuesta = new ObjectDto("No se permiten números en la columna");
+            respuesta = new ObjectDto("No se permiten números en el campo columna");
         }
 
         if (r.getColumna().length() > 2) {
-            respuesta = new ObjectDto("Valor incorrecto en la columna");
+            respuesta = new ObjectDto("Valor incorrecto en el campo columna");
         }
 
-        if (r.getTipo().equals(Registro.ENCE) || r.getTipo().equals(Registro.ENCD)) {
+        if (r.getTipo().equals(ParaVal.ENCE) || r.getTipo().equals(ParaVal.ENCD)) {
             r.setColumna(null);
         }
 
         if (respuesta == null) {
-            Optional<Registro> guardar = this.registroRepository.guardar(r);
+            Optional<ParaVal> guardar = this.registroRepository.guardar(r);
             if (guardar.isPresent()) {
                 respuesta = new ObjectDto(Optional.of(guardar));
             }
