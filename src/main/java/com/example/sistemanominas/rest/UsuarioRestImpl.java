@@ -15,13 +15,13 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class UsuarioRestImpl {
     @Autowired
-    private UsuarioServiceImpl service;
+    private UsuarioServiceImpl usuarioService;
 
     @GetMapping("/lista")
     public ResponseEntity<?> listaDeUsuario() {
         ResponseEntity<?> respuesta;
         try {
-            List<Usuario> lista = this.service.listaUsuarios();
+            List<Usuario> lista = this.usuarioService.listaUsuarios();
             respuesta = lista.isEmpty() ? new ResponseEntity<>(lista, HttpStatus.NO_CONTENT)
                     : new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
@@ -34,7 +34,7 @@ public class UsuarioRestImpl {
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
         ResponseEntity<?> respuesta;
         try {
-            ObjectDto guardar = this.service.guardarUsuario(usuario);
+            ObjectDto guardar = this.usuarioService.guardarUsuario(usuario);
             respuesta = guardar.getObject().isPresent() ? new ResponseEntity<>(guardar, HttpStatus.OK)
                     : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class UsuarioRestImpl {
     public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario) {
         ResponseEntity<?> respuesta;
         try {
-            ObjectDto actualizar = this.service.actualizarUsuario(usuario);
+            ObjectDto actualizar = this.usuarioService.actualizarUsuario(usuario);
             respuesta = actualizar.getObject().isPresent() ? new ResponseEntity<>(actualizar, HttpStatus.OK)
                     : new ResponseEntity<>(actualizar, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -57,11 +57,11 @@ public class UsuarioRestImpl {
     }
 
     @PutMapping("/estado")
-    public ResponseEntity<?> estaUsuario(@RequestBody Integer id) {
+    public ResponseEntity<?> estadoUsuario(@RequestBody Integer id) {
         ResponseEntity<?> respuesta;
         try {
             if (id != null) {
-                Optional<Usuario> usuario = this.service.estadoUsuario(id);
+                Optional<Usuario> usuario = this.usuarioService.estadoUsuario(id);
                 respuesta = usuario.map(value -> new ResponseEntity<>(Map.of("message", "Usuario " +
                         (value.isEnabled() ? "activo" : "inactivo")), HttpStatus.OK)).orElseGet(() ->
                         new ResponseEntity<>(Map.of("message", "No se pudo actualizar el estado"), HttpStatus.NOT_FOUND));

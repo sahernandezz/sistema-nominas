@@ -25,4 +25,8 @@ public class FormatoArchivoRepositoryImpl {
     public Optional<FormatoArchivo> guardar(FormatoArchivo f){
         return Optional.of(this.jpaFormatoArchivo.save(f));
     }
+
+    public Optional<FormatoArchivo> formatoArchivoPorId(Integer id){
+        return this.jpaFormatoArchivo.findById(id);
+    }
 }

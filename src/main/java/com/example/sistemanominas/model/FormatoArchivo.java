@@ -36,6 +36,10 @@ public class FormatoArchivo implements Serializable {
     @Column(name = "estado")
     private String estado = ACTIVO;
 
+    public Boolean isEnabled(){
+        return this.estado.equals(ACTIVO);
+    }
+
     @Override
     public boolean equals(Object o) {
         boolean result;
