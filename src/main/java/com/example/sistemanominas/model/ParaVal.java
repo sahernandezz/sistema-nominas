@@ -28,7 +28,6 @@ public class ParaVal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     public final static String ENCE = "ENCE";
     public final static String ENCD = "ENCD";
 

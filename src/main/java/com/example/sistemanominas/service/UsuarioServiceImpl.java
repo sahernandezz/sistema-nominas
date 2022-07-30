@@ -34,8 +34,10 @@ public class UsuarioServiceImpl {
             if (usuario.isPresent()) {
                 usuario.get().setPermisos(listaPermisos);
                 usuario = this.repository.guardar(usuario.get());
+                respuesta = new ObjectDto(Optional.ofNullable(usuario));
+            }else {
+                respuesta = new ObjectDto("No se pudo guardar el usuario");
             }
-            respuesta = new ObjectDto(Optional.ofNullable(usuario));
         } else {
             respuesta = new ObjectDto("El usuario (" + u.getLogin() + ") ya esta registrado");
         }
@@ -56,7 +58,9 @@ public class UsuarioServiceImpl {
                     u.setClave(this.hash.sha1(u.getClave()));
                 }
 
-                respuesta = new ObjectDto(Optional.ofNullable(this.repository.guardar(u)));
+                Optional<Usuario> usuarioActualizado = this.repository.guardar(u);
+                respuesta = usuarioActualizado.isPresent() ? new ObjectDto(Optional.of(usuarioActualizado))
+                        : new ObjectDto("No se pudo actualizar el usuario");
             }
         }else{
             respuesta = new ObjectDto("No se pudo actualizar el usuario");
