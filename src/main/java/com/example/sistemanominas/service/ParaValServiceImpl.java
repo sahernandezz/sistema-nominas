@@ -13,21 +13,21 @@ import java.util.Optional;
 public class ParaValServiceImpl {
 
     @Autowired
-    private ParaValRepositoryImpl registroRepository;
+    private ParaValRepositoryImpl paraValRepository;
 
-    public List<ParaVal> listaUsuarios() {
-        return this.registroRepository.lista();
+    public List<ParaVal> listaParaVal() {
+        return this.paraValRepository.lista();
     }
 
-    public ObjectDto guardarRegistro(final ParaVal r) {
-        ObjectDto respuesta = this.validacionesGuardar(r);
+    public ObjectDto guardarParaVal(final ParaVal r) {
+        ObjectDto respuesta = this.validacionesGuardarParaVal(r);
 
         if (r.getTipo().equals(ParaVal.ENCE) || r.getTipo().equals(ParaVal.ENCD)) {
             r.setColumna(null);
         }
 
         if (respuesta == null) {
-            Optional<ParaVal> guardar = this.registroRepository.guardar(r);
+            Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
             respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
                     : new ObjectDto("No se pudo guardar");
         }
@@ -35,7 +35,7 @@ public class ParaValServiceImpl {
         return respuesta;
     }
 
-    private ObjectDto validacionesGuardar(final ParaVal r) {
+    private ObjectDto validacionesGuardarParaVal(final ParaVal r) {
         ObjectDto respuesta = null;
 
         if (r.getTipo().equals(ParaVal.ENCE) || r.getTipo().equals(ParaVal.ENCD)) {

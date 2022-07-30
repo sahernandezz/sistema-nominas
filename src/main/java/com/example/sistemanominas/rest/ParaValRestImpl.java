@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/paraVal/api/v1")
+@RequestMapping("/parametro-valor/api/v1")
 public class ParaValRestImpl {
 
     @Autowired
     private ParaValServiceImpl serviceParaVal;
+
+
 }

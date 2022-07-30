@@ -16,7 +16,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "para_val")
+@Table(name = "parametro_valor")
 public class ParaVal implements Serializable {
 
     @Serial
@@ -58,6 +58,10 @@ public class ParaVal implements Serializable {
 
     @Column(name = "expresion_sql", length = 120)
     private String expreSql;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "fk_formato_archivo")
+    private FormatoArchivo formatoArchivo;
 
     @Column(name = "estado")
     private String estado = ACTIVO;
