@@ -21,4 +21,8 @@ public class ParaValRepositoryImpl {
     public List<ParaVal> lista() {
         return this.jpa.findAll();
     }
+
+    public Optional<ParaVal> paraValPorId(final Integer id){
+        return this.jpa.findById(id);
+    }
 }

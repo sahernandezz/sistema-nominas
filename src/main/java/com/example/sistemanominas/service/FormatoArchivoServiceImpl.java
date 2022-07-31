@@ -2,7 +2,6 @@ package com.example.sistemanominas.service;
 
 import com.example.sistemanominas.dto.ObjectDto;
 import com.example.sistemanominas.model.FormatoArchivo;
-import com.example.sistemanominas.model.Usuario;
 import com.example.sistemanominas.repository.FormatoArchivoRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,12 @@ public class FormatoArchivoServiceImpl {
         Optional<FormatoArchivo> guardar = this.formatoArchivoRepository.guardar(f);
         return guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
                 : new ObjectDto("No se pudo guardar");
+    }
+
+    public ObjectDto actualizarFormatoArchivo(final FormatoArchivo f) {
+        Optional<FormatoArchivo> formatoArchivo = this.formatoArchivoRepository.formatoArchivoPorId(f.getId());
+        ObjectDto guardar = guardarFormatoArchivo(f);
+        return formatoArchivo.isPresent() ? new ObjectDto(Optional.of(guardar)) : new ObjectDto("No se pudo actualizar");
     }
 
     public List<FormatoArchivo> listaFormatoArchivoActivos() {

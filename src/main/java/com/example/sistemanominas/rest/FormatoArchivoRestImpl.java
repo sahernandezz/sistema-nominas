@@ -58,6 +58,19 @@ public class FormatoArchivoRestImpl {
         return respuesta;
     }
 
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizarFormatoArchivo(@RequestBody FormatoArchivo formatoArchivo) {
+        ResponseEntity<?> respuesta;
+        try {
+            ObjectDto actualizar = this.formatoArchivoService.actualizarFormatoArchivo(formatoArchivo);
+            respuesta = actualizar.getObject().isPresent() ? new ResponseEntity<>(actualizar, HttpStatus.OK)
+                    : new ResponseEntity<>(actualizar, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            respuesta = new ResponseEntity<>(Map.of("message", "Ocurrió un error :("), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return respuesta;
+    }
+
     @PutMapping("/estado")
     public ResponseEntity<?> estadoFormatoArchivo(@RequestBody Integer id) {
         ResponseEntity<?> respuesta;

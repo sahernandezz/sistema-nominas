@@ -1,6 +1,7 @@
 package com.example.sistemanominas.service;
 
 import com.example.sistemanominas.dto.ObjectDto;
+import com.example.sistemanominas.model.FormatoArchivo;
 import com.example.sistemanominas.model.ParaVal;
 import com.example.sistemanominas.repository.ParaValRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class ParaValServiceImpl {
         }
 
         return respuesta;
+    }
+
+    public ObjectDto actualizarParVal(final ParaVal p) {
+        Optional<ParaVal> paraVal = this.paraValRepository.paraValPorId(p.getId());
+        return paraVal.isPresent() ? this.guardarParaVal(p) : new ObjectDto("No se pudo actualizar");
     }
 
     private ObjectDto validacionesGuardarParaVal(final ParaVal r) {

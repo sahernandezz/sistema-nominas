@@ -14,7 +14,7 @@ public class FormatoArchivoRepositoryImpl {
     @Autowired
     private FormatoArchivoJpa jpaFormatoArchivo;
 
-    public List<FormatoArchivo> lista(String estado){
+    public List<FormatoArchivo> lista(final String estado){
         return this.jpaFormatoArchivo.findAllByEstado(estado);
     }
 
@@ -22,11 +22,11 @@ public class FormatoArchivoRepositoryImpl {
         return this.jpaFormatoArchivo.findAll();
     }
 
-    public Optional<FormatoArchivo> guardar(FormatoArchivo f){
+    public Optional<FormatoArchivo> guardar(final FormatoArchivo f){
         return Optional.of(this.jpaFormatoArchivo.save(f));
     }
 
-    public Optional<FormatoArchivo> formatoArchivoPorId(Integer id){
+    public Optional<FormatoArchivo> formatoArchivoPorId(final Integer id){
         return this.jpaFormatoArchivo.findById(id);
     }
 }
