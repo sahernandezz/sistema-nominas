@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
         return item1.title;
       }
     }
-    return 'Dashboard';
+    return 'Perfil';
   }
 
   salir(): void {
