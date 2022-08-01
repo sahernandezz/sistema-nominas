@@ -50,7 +50,6 @@ public class FormatoArchivoRestImpl {
     public ResponseEntity<?> crearFormatoArchivo(@RequestBody FormatoArchivo formatoArchivo) {
         ResponseEntity<?> respuesta;
         try {
-            System.out.println(formatoArchivo);
             ObjectDto guardar = this.formatoArchivoService.guardarFormatoArchivo(formatoArchivo);
             respuesta = guardar.getObject().isPresent() ? new ResponseEntity<>(guardar, HttpStatus.OK)
                     : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);

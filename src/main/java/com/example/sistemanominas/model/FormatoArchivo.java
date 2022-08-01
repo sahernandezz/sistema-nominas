@@ -30,7 +30,7 @@ public class FormatoArchivo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", unique = true)
     private String descripcion;
 
     @Column(name = "estado")

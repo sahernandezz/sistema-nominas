@@ -16,15 +16,21 @@ public class FormatoArchivoServiceImpl {
     private FormatoArchivoRepositoryImpl formatoArchivoRepository;
 
     public ObjectDto guardarFormatoArchivo(final FormatoArchivo f) {
-        Optional<FormatoArchivo> guardar = this.formatoArchivoRepository.guardar(f);
-        return guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
-                : new ObjectDto("No se pudo guardar");
+        ObjectDto respuesta;
+        if (this.formatoArchivoRepository.findByDescripcion(f.getDescripcion()).isEmpty()) {
+            Optional<FormatoArchivo> guardar = this.formatoArchivoRepository.guardar(f);
+            respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
+                    : new ObjectDto("No se pudo guardar");
+        } else {
+            respuesta = new ObjectDto("La descripción ya se encuentra registrada");
+        }
+        return respuesta;
     }
 
     public ObjectDto actualizarFormatoArchivo(final FormatoArchivo f) {
         Optional<FormatoArchivo> formatoArchivo = this.formatoArchivoRepository.formatoArchivoPorId(f.getId());
         ObjectDto guardar = guardarFormatoArchivo(f);
-        return formatoArchivo.isPresent() ? new ObjectDto(Optional.of(guardar)) : new ObjectDto("No se pudo actualizar");
+        return formatoArchivo.isPresent() ? guardar : new ObjectDto("No se pudo actualizar");
     }
 
     public List<FormatoArchivo> listaFormatoArchivoActivos() {
