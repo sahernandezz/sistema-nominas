@@ -10,6 +10,7 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { UsuariosComponent } from '../../pages/usuarios/usuarios.component';
 import { FormatoArchivoComponent } from '../../pages/formato-archivo/formato-archivo.component';
+import { ParValComponent } from '../../pages/par-val/par-val.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ComponentsModule} from '../../components/components.module';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -40,7 +41,8 @@ import {MatInputModule} from '@angular/material/input';
   declarations: [
     UserProfileComponent,
     UsuariosComponent,
-    FormatoArchivoComponent
+    FormatoArchivoComponent,
+    ParValComponent
   ]
 })
 
