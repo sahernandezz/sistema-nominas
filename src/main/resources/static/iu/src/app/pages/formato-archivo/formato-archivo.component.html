@@ -46,8 +46,8 @@
                 </a>
                 <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
                   <span
-                        (click)="cambiarEstado(element.id, content_estado, content_mensaje, content_estado_resultado)"
-                        class="dropdown-item">Cambiar estado</span>
+                    (click)="cambiarEstado(element.id, content_estado, content_mensaje, content_estado_resultado)"
+                    class="dropdown-item">Cambiar estado</span>
                   <span (click)="openUpdate(content_formulario, element)" class="dropdown-item">Editar</span>
                 </div>
               </div>
@@ -73,24 +73,22 @@
       <h2 class="modal-title">Formulario</h2>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
     </div>
-    <div class="p-4">
-      <form
-        (submit)="eventoFormato['estado'] === 'R' ? registrarFormato($event, content_completado, content_mensaje)
+    <form class="padding-formulario"
+          (submit)="eventoFormato['estado'] === 'R' ? registrarFormato($event, content_completado, content_mensaje)
         : actualizarFormato($event, content_completado, content_mensaje)">
-        <div class="row">
-          <div class="form-group col-md-12" id="from_group_descripcion">
-            <label for="descripcion">descripción <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="descripcion" placeholder="Descripción"
-                   [defaultValue]="eventoFormato['estado'] === 'U'? eventoFormato['formato']['descripcion']: ''">
-            <span class="text-red font-size-12" id="text_descripcion"></span>
-          </div>
+      <div class="row">
+        <div class="form-group col-md-12" id="from_group_descripcion">
+          <label for="descripcion">descripción <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="descripcion" placeholder="Descripción"
+                 [defaultValue]="eventoFormato['estado'] === 'U'? eventoFormato['formato']['descripcion']: ''">
+          <span class="text-red font-size-12" id="text_descripcion"></span>
         </div>
-        <div class="modal-footer col-md-12">
-          <input type="submit" class="btn btn-primary" id="btn_form"
-                 value="{{eventoFormato['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
-        </div>
-      </form>
-    </div>
+      </div>
+      <div class="modal-footer col-md-12">
+        <input type="submit" class="btn btn-primary" id="btn_form"
+               value="{{eventoFormato['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+      </div>
+    </form>
   </div>
 </ng-template>
 

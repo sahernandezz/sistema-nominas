@@ -98,12 +98,11 @@
       <h2 class="modal-title">Formulario</h2>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
     </div>
-    <div class="p-4">
-      <form
+      <form class="padding-formulario"
         (submit)="eventoParVal['estado'] === 'R' ? registrarParVal($event, content_completado, content_mensaje)
         : actualizarParVal($event, content_completado, content_mensaje)">
         <div class="row">
-          <div class="form-group col-md-12" id="from_group_tipo">
+          <div class="form-group col-md-6" id="from_group_tipo">
             <label for="tipo">Tipo <span class="text-red">*</span></label>
             <select class="form-control" id="tipo">
               <option value="0">Seleccióne...</option>
@@ -112,6 +111,16 @@
                 *ngFor="let tipo of listaTipo" value="{{tipo}}">{{tipo}}</option>
             </select>
             <span class="text-red font-size-12" id="text_tipo"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_tipoDato">
+            <label for="tipo">Tipo de dato <span class="text-red">*</span></label>
+            <select class="form-control" id="tipoDato">
+              <option value="0">Seleccióne...</option>
+              <option
+                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipoDato'] ===  tipoDato['valor']: false"
+                *ngFor="let tipoDato of listTipoDato" value="{{tipoDato['valor']}}">{{tipoDato['nombre']}}</option>
+            </select>
+            <span class="text-red font-size-12" id="text_tipoDato"></span>
           </div>
           <div class="form-group col-md-6" id="from_group_celda">
             <label for="tipo">Celda <span class="text-red">*</span></label>
@@ -124,16 +133,6 @@
             <input type="text" class="form-control" id="columna" placeholder="Columna"
                    [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['columna']: ''">
             <span class="text-red font-size-12" id="text_columna"></span>
-          </div>
-          <div class="form-group col-md-12" id="from_group_tipoDato">
-            <label for="tipo">Tipo de dato <span class="text-red">*</span></label>
-            <select class="form-control" id="tipoDato">
-              <option value="0">Seleccióne...</option>
-              <option
-                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipoDato'] ===  tipoDato['valor']: false"
-                *ngFor="let tipoDato of listTipoDato" value="{{tipoDato['valor']}}">{{tipoDato['nombre']}}</option>
-            </select>
-            <span class="text-red font-size-12" id="text_tipoDato"></span>
           </div>
           <div class="form-group col-md-6" id="from_group_valorPer">
             <label for="tipo">Valor permitido <span class="text-red">*</span></label>
@@ -164,7 +163,6 @@
                  value="{{eventoParVal['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
         </div>
       </form>
-    </div>
   </div>
 </ng-template>
 

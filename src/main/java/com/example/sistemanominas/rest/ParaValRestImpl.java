@@ -1,6 +1,7 @@
 package com.example.sistemanominas.rest;
 
 import com.example.sistemanominas.dto.ObjectDto;
+import com.example.sistemanominas.model.FormatoArchivo;
 import com.example.sistemanominas.model.ParaVal;
 import com.example.sistemanominas.service.ParaValServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -52,6 +54,24 @@ public class ParaValRestImpl {
             ObjectDto actualizar = this.paraValService.actualizarParVal(paraVal);
             respuesta = actualizar.getObject().isPresent() ? new ResponseEntity<>(actualizar, HttpStatus.OK)
                     : new ResponseEntity<>(actualizar, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            respuesta = new ResponseEntity<>(Map.of("message", "Ocurrió un error :("), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return respuesta;
+    }
+
+    @PutMapping("/estado")
+    public ResponseEntity<?> estadoParaVal(@RequestBody Integer id) {
+        ResponseEntity<?> respuesta;
+        try {
+            if (id != null) {
+                Optional<ParaVal> paraVal = this.paraValService.estadoParaVal(id);
+                respuesta = paraVal.map(value -> new ResponseEntity<>(Map.of("message", "Formato " +
+                        (value.isEnabled() ? "activo" : "inactivo")), HttpStatus.OK)).orElseGet(() ->
+                        new ResponseEntity<>(Map.of("message", "No se pudo actualizar el estado"), HttpStatus.NOT_FOUND));
+            } else {
+                respuesta = new ResponseEntity<>(Map.of("message", "Datos incorrectos"), HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(Map.of("message", "Ocurrió un error :("), HttpStatus.INTERNAL_SERVER_ERROR);
         }

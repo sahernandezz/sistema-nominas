@@ -78,50 +78,48 @@
       <h2 class="modal-title">Formulario</h2>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
     </div>
-    <div class="p-4">
-      <form
-        (submit)="eventoUsuario['estado'] === 'R' ? registrarUsuario($event, content_completado, content_mensaje)
+    <form class="padding-formulario"
+          (submit)="eventoUsuario['estado'] === 'R' ? registrarUsuario($event, content_completado, content_mensaje)
         : actualizarUsuario($event, content_completado, content_mensaje)">
-        <div class="row">
-          <div class="form-group col-md-6" id="from_group_nombre_usuario">
-            <label for="nombre_usuario">nombre <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="nombre_usuario" placeholder="nombre"
-                   [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['nombre']: ''">
-            <span class="text-red font-size-12" id="text_nombre_usuario"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_login_usuario">
-            <label for="login_usuario">nombre de usuario <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="login_usuario" placeholder="usuario"
-                   [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['login']: ''">
-            <span class="text-red font-size-12" id="text_login_usuario"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_clave_usuario">
-            <label for="clave_usuario">Contraseña <span class="text-red">*</span></label>
-            <input type="password" class="form-control" id="clave_usuario" placeholder="Contraseña">
-            <span class="text-red font-size-12" id="text_clave_usuario"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_confirmar_clave_usuario">
-            <label for="confirmar_clave_usuario">Confirmar contraseña <span class="text-red">*</span></label>
-            <input type="password" class="form-control" id="confirmar_clave_usuario" placeholder="confirmar">
-            <span class="text-red font-size-12" id="text_confirmar_clave_usuario"></span>
-          </div>
-          <div class="form-group col-md-12" id="from_group_permisos">
-            <label for="permisos">Permisos <span class="text-red">*</span></label>
-            <select class="form-control" id="permisos">
-              <option value="0">Seleccióne...</option>
-              <option
-                [selected]="eventoUsuario['estado'] === 'U' ? eventoUsuario['usuario']['permisos'][0]['id'] ===  rol.id: false"
-                *ngFor="let rol of dataPermisos" value="{{parse(rol)}}">{{rol.nombre}}</option>
-            </select>
-            <span class="text-red font-size-12" id="text_permisos"></span>
-          </div>
+      <div class="row">
+        <div class="form-group col-md-6" id="from_group_nombre_usuario">
+          <label for="nombre_usuario">nombre <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="nombre_usuario" placeholder="nombre"
+                 [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['nombre']: ''">
+          <span class="text-red font-size-12" id="text_nombre_usuario"></span>
         </div>
-        <div class="modal-footer col-md-12">
-          <input type="submit" class="btn btn-primary" id="btn_form"
-                 value="{{eventoUsuario['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+        <div class="form-group col-md-6" id="from_group_login_usuario">
+          <label for="login_usuario">nombre de usuario <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="login_usuario" placeholder="usuario"
+                 [defaultValue]="eventoUsuario['estado'] === 'U'? eventoUsuario['usuario']['login']: ''">
+          <span class="text-red font-size-12" id="text_login_usuario"></span>
         </div>
-      </form>
-    </div>
+        <div class="form-group col-md-6" id="from_group_clave_usuario">
+          <label for="clave_usuario">Contraseña <span class="text-red">*</span></label>
+          <input type="password" class="form-control" id="clave_usuario" placeholder="Contraseña">
+          <span class="text-red font-size-12" id="text_clave_usuario"></span>
+        </div>
+        <div class="form-group col-md-6" id="from_group_confirmar_clave_usuario">
+          <label for="confirmar_clave_usuario">Confirmar contraseña <span class="text-red">*</span></label>
+          <input type="password" class="form-control" id="confirmar_clave_usuario" placeholder="confirmar">
+          <span class="text-red font-size-12" id="text_confirmar_clave_usuario"></span>
+        </div>
+        <div class="form-group col-md-12" id="from_group_permisos">
+          <label for="permisos">Permisos <span class="text-red">*</span></label>
+          <select class="form-control" id="permisos">
+            <option value="0">Seleccióne...</option>
+            <option
+              [selected]="eventoUsuario['estado'] === 'U' ? eventoUsuario['usuario']['permisos'][0]['id'] ===  rol.id: false"
+              *ngFor="let rol of dataPermisos" value="{{parse(rol)}}">{{rol.nombre}}</option>
+          </select>
+          <span class="text-red font-size-12" id="text_permisos"></span>
+        </div>
+      </div>
+      <div class="modal-footer col-md-12">
+        <input type="submit" class="btn btn-primary" id="btn_form"
+               value="{{eventoUsuario['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+      </div>
+    </form>
   </div>
 </ng-template>
 
