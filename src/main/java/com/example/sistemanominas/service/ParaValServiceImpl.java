@@ -55,4 +55,13 @@ public class ParaValServiceImpl {
         }
         return respuesta;
     }
+
+    public Optional<ParaVal> estadoParaVal(final Integer id) {
+        Optional<ParaVal> paraVal = this.paraValRepository.paraValPorId(id);
+        if (paraVal.isPresent()) {
+            paraVal.get().setEstado(paraVal.get().isEnabled() ? ParaVal.INACTIVO : ParaVal.ACTIVO);
+            paraVal = this.paraValRepository.guardar(paraVal.get());
+        }
+        return paraVal;
+    }
 }

@@ -63,9 +63,9 @@ export class FormatoArchivoComponent implements OnInit {
     this.eventoFormato = {estado: 'R'};
   }
 
-  openUpdate(content: any, usuario: Usuario): void {
+  openUpdate(content: any, formatoArchivo: FormatoArchivo): void {
     this.open(content);
-    this.eventoFormato = {estado: 'U', formato: usuario};
+    this.eventoFormato = {estado: 'U', formato: formatoArchivo};
   }
 
   cambiarEstado(id: number, content: any, mensaje: any, content_resultado: any): void {

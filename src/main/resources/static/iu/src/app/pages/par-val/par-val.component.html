@@ -45,7 +45,7 @@
 
           <ng-container matColumnDef="Tipo de dato">
             <th mat-header-cell *matHeaderCellDef>Tipo de dato</th>
-            <td mat-cell *matCellDef="let element">{{element.tipoDato}}</td>
+            <td mat-cell *matCellDef="let element">{{tipoDeDatoTabla(element.tipoDato)}}</td>
           </ng-container>
 
           <ng-container matColumnDef="Valor permitido">
@@ -100,30 +100,63 @@
     </div>
     <div class="p-4">
       <form
-        (submit)="eventoParVal['estado'] === 'R' ? registrarUsuario($event, content_completado, content_mensaje)
-        : actualizarUsuario($event, content_completado, content_mensaje)">
+        (submit)="eventoParVal['estado'] === 'R' ? registrarParVal($event, content_completado, content_mensaje)
+        : actualizarParVal($event, content_completado, content_mensaje)">
         <div class="row">
-          <div class="form-group col-md-6" id="from_group_tipo">
-            <label for="tipo">nombre <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="tipo" placeholder="nombre"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['tipo']: ''">
-            <span class="text-red font-size-12" id="text_tipo"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_tipo">
-            <label for="tipo">nombre <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="tipo" placeholder="nombre"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['tipo']: ''">
-            <span class="text-red font-size-12" id="text_tipo"></span>
-          </div>
-          <div class="form-group col-md-12" id="from_group_permisos">
-            <label for="confirmar_clave_usuario">Permisos <span class="text-red">*</span></label>
-            <select class="form-control" id="permisos">
+          <div class="form-group col-md-12" id="from_group_tipo">
+            <label for="tipo">Tipo <span class="text-red">*</span></label>
+            <select class="form-control" id="tipo">
               <option value="0">Seleccióne...</option>
               <option
-                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['usuario']['permisos'][0]['id'] ===  rol.id: false"
-                *ngFor="let rol of formatos" value="{{parse(rol)}}">{{rol.nombre}}</option>
+                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipo'] ===  tipo: false"
+                *ngFor="let tipo of listaTipo" value="{{tipo}}">{{tipo}}</option>
             </select>
-            <span class="text-red font-size-12" id="text_permisos"></span>
+            <span class="text-red font-size-12" id="text_tipo"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_celda">
+            <label for="tipo">Celda <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="celda" placeholder="Celda"
+                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['celda']: ''">
+            <span class="text-red font-size-12" id="text_celda"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_columna">
+            <label for="tipo">Columna <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="columna" placeholder="Columna"
+                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['columna']: ''">
+            <span class="text-red font-size-12" id="text_columna"></span>
+          </div>
+          <div class="form-group col-md-12" id="from_group_tipoDato">
+            <label for="tipo">Tipo de dato <span class="text-red">*</span></label>
+            <select class="form-control" id="tipoDato">
+              <option value="0">Seleccióne...</option>
+              <option
+                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipoDato'] ===  tipoDato['valor']: false"
+                *ngFor="let tipoDato of listTipoDato" value="{{tipoDato['valor']}}">{{tipoDato['nombre']}}</option>
+            </select>
+            <span class="text-red font-size-12" id="text_tipoDato"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_valorPer">
+            <label for="tipo">Valor permitido <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="valorPer" placeholder="Valor permitido"
+                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['valorPer']: ''">
+            <span class="text-red font-size-12" id="text_valorPer"></span>
+          </div>
+          <div class="form-group col-md-6" id="from_group_expreSql">
+            <label for="tipo">Expreción Sql <span class="text-red">*</span></label>
+            <input type="text" class="form-control" id="expreSql" placeholder="Expreción Sql"
+                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['expreSql']: ''">
+            <span class="text-red font-size-12" id="text_expreSql"></span>
+          </div>
+          <div class="form-group col-md-12" id="from_group_formatoArchivo">
+            <label for="tipo">Formato <span class="text-red">*</span></label>
+            <select class="form-control" id="formatoArchivo">
+              <option value="0">Seleccióne...</option>
+              <option
+                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['formatoArchivo']['id'] ===  formatoArchivo.id: false"
+                *ngFor="let formatoArchivo of formatos"
+                value="{{parse(formatoArchivo)}}">{{formatoArchivo.descripcion}}</option>
+            </select>
+            <span class="text-red font-size-12" id="text_formatoArchivo"></span>
           </div>
         </div>
         <div class="modal-footer col-md-12">

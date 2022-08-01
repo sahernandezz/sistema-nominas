@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../app.component';
 import {ParaValHttp} from '../../shared/services/ParaVal';
+import {FormularioArchivoHttp} from '../../shared/services/FormularioArchivo';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
@@ -19,17 +20,23 @@ export class ParValComponent implements OnInit {
   formatos: FormatoArchivo[];
   toppings = new FormControl('');
   displayedColumns: string[] = ['Tipo', 'Celda', 'Columna', 'Tipo de dato', 'Valor permitido', 'Formato', 'Acciones'];
+  listTipoDato: Object[] = [{valor: 'N', nombre: 'Numero'}, {valor: 'D', nombre: 'Fecha'}, {
+    valor: 'S',
+    nombre: 'Texto'
+  }];
+  listaTipo: string[] = ['ENCE', 'ENCD', 'DETE', 'DETD'];
   dataSource = new MatTableDataSource<ParaVal>([]);
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   constructor(public modalService: NgbModal, private httpParVal: ParaValHttp,
+              private httpFormulario: FormularioArchivoHttp,
               public app: AppComponent, private router: Router) {
-    this.formatos = this.getPermisos();
+    this.formatos = this.getFormatos();
   }
 
   ngOnInit(): void {
-    this.httpUsuario.listaUsuarios().subscribe((data) => {
+    this.httpParVal.listaParVal().subscribe((data) => {
       this.dataSource.data = data;
     }, (error) => {
       if (error.status === 401) {
@@ -65,14 +72,24 @@ export class ParValComponent implements OnInit {
     this.eventoParVal = {estado: 'R'};
   }
 
-  openUpdate(content: any, usuario: Usuario): void {
+  openUpdate(content: any, paraVal: ParaVal): void {
     this.open(content);
-    this.eventoParVal = {estado: 'U', parVal: usuario};
+    this.eventoParVal = {estado: 'U', parVal: paraVal};
+  }
+
+  tipoDeDatoTabla(dato: string): string {
+    let respuesta;
+    this.listTipoDato.filter((item) => {
+      if (item['valor'] === dato) {
+        respuesta = item['nombre'];
+      }
+    });
+    return respuesta;
   }
 
   cambiarEstado(id: number, content: any, mensaje: any, content_resultado: any): void {
     this.open(content);
-    this.httpUsuario.estadoUsuario(id).subscribe((data) => {
+    this.httpParVal.estadoParVal(id).subscribe((data) => {
       setTimeout(() => {
         this.modalService.dismissAll('Cross click');
         this.ngOnInit();
@@ -89,9 +106,9 @@ export class ParValComponent implements OnInit {
     });
   }
 
-  getPermisos(): Rol[] {
+  getFormatos(): FormatoArchivo[] {
     const lista = [];
-    this.httpUsuario.listaPermisos().subscribe(data => {
+    this.httpFormulario.listaFormulariosActivos().subscribe(data => {
       lista.push(...data);
     }, (error) => {
       if (error.status === 401) {
@@ -120,12 +137,12 @@ export class ParValComponent implements OnInit {
   selectInput(): Object {
     const ObjectResult = {};
     let i = 0;
-    const listaInput = ['nombre_usuario', 'login_usuario'];
+    const listaInput = ['celda', 'columna', 'valorPer', 'expreSql', 'tipo', 'tipoDato', 'formatoArchivo'];
     for (const label of listaInput) {
       const input = document.getElementById(label) as HTMLInputElement || null;
       const from_group = document.getElementById('from_group_' + label) as HTMLInputElement || null;
       const text = document.getElementById('text_' + label) as HTMLInputElement || null;
-      if (input.value === null || input.value === '') {
+      if (input.value === null || input.value === '' || input.value === '0') {
         from_group.classList.add('has-danger');
         text.innerText = 'Campo vació';
       } else {
@@ -138,66 +155,23 @@ export class ParValComponent implements OnInit {
     return i === listaInput.length ? ObjectResult : null;
   }
 
-  validarClave(): string {
-    let estado = null;
-    const inputClave = document.getElementById('clave_usuario') as HTMLInputElement || null;
-    const inputConfirmar = document.getElementById('confirmar_clave_usuario') as HTMLInputElement || null;
-    const clave = inputClave;
-    if (this.eventoParVal['estado'] === 'R') {
-      if (clave.value === null || clave.value === '') {
-        this.errorInput('clave_usuario', 'Campo vació');
-      }
-
-      if (inputConfirmar.value === null || inputConfirmar.value === '') {
-        this.errorInput('confirmar_clave_usuario', 'Campo vació');
-      }
-    }
-
-    if (clave.value !== inputConfirmar.value) {
-      this.errorInput('confirmar_clave_usuario', 'La contraseña no coincide');
-    } else {
-      estado = clave.value;
-    }
-    return estado;
+  parse(formato: FormatoArchivo): string {
+    return JSON.stringify(formato);
   }
 
-  parse(rol: Rol): string {
-    return JSON.stringify(rol);
-  }
-
-  permisos(): Rol[] {
-    const value: Rol[] = [];
-    const select = document.getElementById('permisos') as HTMLInputElement || null;
-    const from_group_select = document.getElementById('from_group_' + 'permisos') as HTMLInputElement || null;
-    const text_select = document.getElementById('text_' + 'permisos') as HTMLInputElement || null;
-
-    if (select.value === '0') {
-      from_group_select.classList.add('has-danger');
-      text_select.innerText = 'Selección no valida';
-    } else {
-      from_group_select.classList.remove('has-danger');
-      value.push(JSON.parse(select.value));
-      text_select.innerText = '';
-    }
-    return value.length !== 0 ? value : null;
-  }
-
-  registrarUsuario = (e: Event, content: any, mensaje: any) => {
+  registrarParVal = (e: Event, content: any, mensaje: any) => {
     e.preventDefault();
-    let value = true;
     const valueInput = this.selectInput();
-    const claveInput = this.validarClave();
-    const permisosValor = this.permisos();
-    value = valueInput === null ? false : value;
-    value = claveInput === null ? false : value;
-    value = permisosValor === null ? false : value;
-    if (value) {
-      this.httpUsuario.registrarUsuario({
+    if (valueInput !== null) {
+      this.httpParVal.registrarParVal({
         id: undefined,
-        nombre: valueInput['nombre_usuario'],
-        login: valueInput['login_usuario'],
-        clave: claveInput,
-        permisos: permisosValor,
+        tipo: valueInput['tipo'],
+        celda: valueInput['celda'],
+        columna: valueInput['columna'],
+        tipoDato: valueInput['tipoDato'],
+        valorPer: valueInput['valorPer'],
+        expreSql: valueInput['expreSql'],
+        formatoArchivo: JSON.parse(valueInput['formatoArchivo']),
         estado: undefined
       }).subscribe((data) => {
         this.completado(content);
@@ -208,23 +182,20 @@ export class ParValComponent implements OnInit {
     }
   }
 
-  actualizarUsuario(e: Event, content: any, mensaje: any): void {
+  actualizarParVal(e: Event, content: any, mensaje: any): void {
     e.preventDefault();
     const valueInput = this.selectInput();
-    const claveInput = this.validarClave();
-    const permisosValor = this.permisos();
-    let value = true;
-    value = claveInput === null ? false : value;
-    value = valueInput === null ? false : value;
-    value = permisosValor === null ? false : value;
-    if (value) {
-      this.httpUsuario.actualizarUsuario({
-          id: this.eventoParVal['usuario']['id'],
-          nombre: valueInput['nombre_usuario'],
-          login: valueInput['login_usuario'],
-          clave: claveInput === '' ? this.eventoParVal['usuario']['clave'] : claveInput,
-          permisos: permisosValor,
-          estado: this.eventoParVal['usuario']['estado']
+    if (valueInput !== null) {
+      this.httpParVal.actualizarParVal({
+          id: this.eventoParVal['parVal']['id'],
+          tipo: valueInput['tipo'],
+          celda: valueInput['celda'],
+          columna: valueInput['columna'],
+          tipoDato: valueInput['tipoDato'],
+          valorPer: valueInput['valorPer'],
+          expreSql: valueInput['expreSql'],
+          formatoArchivo: JSON.parse(valueInput['formatoArchivo']),
+          estado: this.eventoParVal['parVal']['estado']
         }
       ).subscribe((data) => {
         this.completado(content);
@@ -236,7 +207,7 @@ export class ParValComponent implements OnInit {
   }
 
   okFormulario(): void {
-    const listaInput = ['nombre_usuario', 'login_usuario', 'clave_usuario', 'confirmar_clave_usuario', 'permisos'];
+    const listaInput = ['celda', 'columna', 'valorPer', 'expreSql', 'tipo', 'tipoDato', 'formatoArchivo'];
     for (const label of listaInput) {
       const from_group = document.getElementById('from_group_' + label) as HTMLInputElement || null;
       const text_select = document.getElementById('text_' + label) as HTMLInputElement || null;
