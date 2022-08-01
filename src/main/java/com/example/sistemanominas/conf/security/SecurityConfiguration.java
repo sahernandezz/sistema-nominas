@@ -62,10 +62,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling()
                 .authenticationEntryPoint(this.entryPoint).and()
-                .authorizeRequests((request) -> request.antMatchers("/auth/api/v1/*", "/", "/assets/*").permitAll()
-                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
+                .authorizeRequests(
+                        (request) -> request.antMatchers("/auth/api/v1/*", "/", "/assets/*").permitAll()
+                                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .anyRequest().authenticated()
+                )
+
                 .addFilterBefore(new JWTAuthenticationFilter(this.userService, this.jWTTokenHelper),
                         UsernamePasswordAuthenticationFilter.class);
+
 
         http.csrf().disable().cors().and().headers().frameOptions().disable();
     }

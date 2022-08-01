@@ -7,48 +7,48 @@ import {AppComponent} from '../../app.component';
   providedIn: 'root'
 })
 
-export class UsuarioHttp {
+export class FormularioArchivoHttp {
   app: AppComponent;
   url: string;
 
   constructor(private http: HttpClient) {
     this.app = new AppComponent();
-    this.url = '/usuario/api/v1';
+    this.url = '/formato-archivo/api/v1';
   }
 
-  public listaUsuarios(): any {
-    return this.http.get<Usuario[]>(this.app.getConfig().url + this.url + '/lista', {
+  public listaFormularios(): any {
+    return this.http.get<FormatoArchivo[]>(this.app.getConfig().url + this.url + '/lista', {
       headers: {
         'Authorization': `Bearer ${getToken()}`
       }
     });
   }
 
-  public listaPermisos(): any {
-    return this.http.get<Rol[]>(this.app.getConfig().url + '/permisos/api/v1/lista', {
+  public listaFormulariosActivos(): any {
+    return this.http.get<FormatoArchivo[]>(this.app.getConfig().url + this.url + '/lista/activos', {
       headers: {
         'Authorization': `Bearer ${getToken()}`
       }
     });
   }
 
-  public registrarUsuario(usuario: Usuario): any {
-    return this.http.post(this.app.getConfig().url + this.url + `/crear`, usuario, {
+  public registrarFormulario(formatoArchivo: FormatoArchivo): any {
+    return this.http.post(this.app.getConfig().url + this.url + `/crear`, formatoArchivo, {
       headers: {
         'Authorization': `Bearer ${getToken()}`
       }
     });
   }
 
-  public actualizarUsuario(usuario: Usuario): any {
-    return this.http.put(this.app.getConfig().url + this.url + `/actualizar`, usuario, {
+  public actualizarFormulario(formatoArchivo: FormatoArchivo): any {
+    return this.http.put(this.app.getConfig().url + this.url + `/actualizar`, formatoArchivo, {
       headers: {
         'Authorization': `Bearer ${getToken()}`
       }
     });
   }
 
-  public estadoUsuario(id: number): any {
+  public estadoFormulario(id: number): any {
     return this.http.put(this.app.getConfig().url + this.url + `/estado`, id, {
       headers: {
         'Authorization': `Bearer ${getToken()}`

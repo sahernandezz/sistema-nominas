@@ -10,8 +10,8 @@ declare interface RouteInfo {
 }
 
 export const ROUTES: RouteInfo[] = [
-  // {path: '/dashboard', title: 'Dashboard', icon: 'ni-tv-2 text-primary', class: ''},
   {path: '/usuarios', title: 'Usuarios', icon: 'ni-bullet-list-67 text-red', class: ''},
+  {path: '/formatos', title: 'Formatos', icon: 'ni-bullet-list-67 text-red', class: ''}
 ];
 
 @Component({
@@ -24,6 +24,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
   app: AppComponent;
+
   constructor(private router: Router) {
     this.app = new AppComponent();
   }

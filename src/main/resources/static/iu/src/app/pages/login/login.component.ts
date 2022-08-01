@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {AppComponent} from '../../app.component';
 import {Injectable} from '@angular/core';
+import {ROUTES} from '../../components/sidebar/sidebar.component';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LoginHttp} from '../../shared/services/login';
 
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         clave.disabled = true;
         this.app.setUsuario(data.object['usuario']);
         setTimeout(() => {
-          this.router.navigate(['/usuarios']).then(e => null);
+          this.router.navigate([ROUTES[0].path]).then(e => null);
         }, 1000);
     }, (error) => {
       if (error.status === 400) {

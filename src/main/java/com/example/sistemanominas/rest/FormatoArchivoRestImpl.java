@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/formato-archivo/api/v1")
 public class FormatoArchivoRestImpl {
 
@@ -32,7 +33,7 @@ public class FormatoArchivoRestImpl {
         return respuesta;
     }
 
-    @GetMapping("/lista/")
+    @GetMapping("/lista")
     public ResponseEntity<?> listaFormatoArchivo() {
         ResponseEntity<?> respuesta;
         try {
@@ -49,6 +50,7 @@ public class FormatoArchivoRestImpl {
     public ResponseEntity<?> crearFormatoArchivo(@RequestBody FormatoArchivo formatoArchivo) {
         ResponseEntity<?> respuesta;
         try {
+            System.out.println(formatoArchivo);
             ObjectDto guardar = this.formatoArchivoService.guardarFormatoArchivo(formatoArchivo);
             respuesta = guardar.getObject().isPresent() ? new ResponseEntity<>(guardar, HttpStatus.OK)
                     : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);
