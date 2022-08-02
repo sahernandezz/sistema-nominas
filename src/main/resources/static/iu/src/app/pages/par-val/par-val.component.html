@@ -98,71 +98,73 @@
       <h2 class="modal-title">Formulario</h2>
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
     </div>
-      <form class="padding-formulario"
-        (submit)="eventoParVal['estado'] === 'R' ? registrarParVal($event, content_completado, content_mensaje)
+    <form class="padding-formulario"
+          (submit)="eventoParVal['estado'] === 'R' ? registrarParVal($event, content_completado, content_mensaje)
         : actualizarParVal($event, content_completado, content_mensaje)">
-        <div class="row">
-          <div class="form-group col-md-6" id="from_group_tipo">
-            <label for="tipo">Tipo <span class="text-red">*</span></label>
-            <select class="form-control" id="tipo">
-              <option value="0">Seleccióne...</option>
-              <option
-                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipo'] ===  tipo: false"
-                *ngFor="let tipo of listaTipo" value="{{tipo}}">{{tipo}}</option>
-            </select>
-            <span class="text-red font-size-12" id="text_tipo"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_tipoDato">
-            <label for="tipo">Tipo de dato <span class="text-red">*</span></label>
-            <select class="form-control" id="tipoDato">
-              <option value="0">Seleccióne...</option>
-              <option
-                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipoDato'] ===  tipoDato['valor']: false"
-                *ngFor="let tipoDato of listTipoDato" value="{{tipoDato['valor']}}">{{tipoDato['nombre']}}</option>
-            </select>
-            <span class="text-red font-size-12" id="text_tipoDato"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_celda">
-            <label for="tipo">Celda <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="celda" placeholder="Celda"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['celda']: ''">
-            <span class="text-red font-size-12" id="text_celda"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_columna">
-            <label for="tipo">Columna <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="columna" placeholder="Columna"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['columna']: ''">
-            <span class="text-red font-size-12" id="text_columna"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_valorPer">
-            <label for="tipo">Valor permitido <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="valorPer" placeholder="Valor permitido"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['valorPer']: ''">
-            <span class="text-red font-size-12" id="text_valorPer"></span>
-          </div>
-          <div class="form-group col-md-6" id="from_group_expreSql">
-            <label for="tipo">Expreción Sql <span class="text-red">*</span></label>
-            <input type="text" class="form-control" id="expreSql" placeholder="Expreción Sql"
-                   [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['expreSql']: ''">
-            <span class="text-red font-size-12" id="text_expreSql"></span>
-          </div>
-          <div class="form-group col-md-12" id="from_group_formatoArchivo">
-            <label for="tipo">Formato <span class="text-red">*</span></label>
-            <select class="form-control" id="formatoArchivo">
-              <option value="0">Seleccióne...</option>
-              <option
-                [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['formatoArchivo']['id'] ===  formatoArchivo.id: false"
-                *ngFor="let formatoArchivo of formatos"
-                value="{{parse(formatoArchivo)}}">{{formatoArchivo.descripcion}}</option>
-            </select>
-            <span class="text-red font-size-12" id="text_formatoArchivo"></span>
-          </div>
+      <div class="row">
+        <div class="form-group col-md-6" id="from_group_tipo">
+          <label for="tipo">Tipo <span class="text-red">*</span></label>
+          <select class="form-control" id="tipo">
+            <option value="0">Seleccióne...</option>
+            <option
+              [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipo'] ===  tipo: false"
+              *ngFor="let tipo of listaTipo" value="{{tipo}}">{{tipo}}</option>
+          </select>
+          <span class="text-red font-size-12" id="text_tipo"></span>
         </div>
-        <div class="modal-footer col-md-12">
-          <input type="submit" class="btn btn-primary" id="btn_form"
-                 value="{{eventoParVal['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+        <div class="form-group col-md-6" id="from_group_tipoDato">
+          <label for="tipo">Tipo de dato <span class="text-red">*</span></label>
+          <select class="form-control" id="tipoDato">
+            <option value="0">Seleccióne...</option>
+            <option
+              [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['tipoDato'] ===  tipoDato['valor']: false"
+              *ngFor="let tipoDato of listTipoDato" value="{{tipoDato['valor']}}">{{tipoDato['nombre']}}</option>
+          </select>
+          <span class="text-red font-size-12" id="text_tipoDato"></span>
         </div>
-      </form>
+        <div class="form-group col-md-6" id="from_group_celda">
+          <label for="tipo">Celda <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="celda" placeholder="Celda"
+                 [defaultValue]="eventoParVal['estado'] === 'U'?
+                   eventoParVal['parVal']['celda'] === null ? '': eventoParVal['parVal']['celda'] : ''">
+          <span class="text-red font-size-12" id="text_celda"></span>
+        </div>
+        <div class="form-group col-md-6" id="from_group_columna">
+          <label for="tipo">Columna <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="columna" placeholder="Columna"
+                 [defaultValue]="eventoParVal['estado'] === 'U'?
+                  eventoParVal['parVal']['columna'] === null ? '': eventoParVal['parVal']['columna'] : ''">
+          <span class="text-red font-size-12" id="text_columna"></span>
+        </div>
+        <div class="form-group col-md-6" id="from_group_valorPer">
+          <label for="tipo">Valor permitido <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="valorPer" placeholder="Valor permitido"
+                 [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['valorPer']: ''">
+          <span class="text-red font-size-12" id="text_valorPer"></span>
+        </div>
+        <div class="form-group col-md-6" id="from_group_expreSql">
+          <label for="tipo">Expreción Sql <span class="text-red">*</span></label>
+          <input type="text" class="form-control" id="expreSql" placeholder="Expreción Sql"
+                 [defaultValue]="eventoParVal['estado'] === 'U'? eventoParVal['parVal']['expreSql']: ''">
+          <span class="text-red font-size-12" id="text_expreSql"></span>
+        </div>
+        <div class="form-group col-md-12" id="from_group_formatoArchivo">
+          <label for="tipo">Formato <span class="text-red">*</span></label>
+          <select class="form-control" id="formatoArchivo">
+            <option value="0">Seleccióne...</option>
+            <option
+              [selected]="eventoParVal['estado'] === 'U' ? eventoParVal['parVal']['formatoArchivo']['id'] ===  formatoArchivo.id: false"
+              *ngFor="let formatoArchivo of formatos"
+              value="{{parse(formatoArchivo)}}">{{formatoArchivo.descripcion}}</option>
+          </select>
+          <span class="text-red font-size-12" id="text_formatoArchivo"></span>
+        </div>
+      </div>
+      <div class="modal-footer col-md-12">
+        <input type="submit" class="btn btn-primary" id="btn_form"
+               value="{{eventoParVal['estado'] === 'R' ? 'Guardar' : 'Actualizar'}}">
+      </div>
+    </form>
   </div>
 </ng-template>
 

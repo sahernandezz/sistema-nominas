@@ -52,6 +52,8 @@ public class ParaValServiceImpl {
             respuesta = new ObjectDto("No se permiten números en el campo columna");
         } else if (r.getColumna().length() > 2) {
             respuesta = new ObjectDto("Valor incorrecto en el campo columna");
+        }else if (r.getCelda().length() > 5) {
+            respuesta = new ObjectDto("Valor incorrecto en el campo celda");
         }
         return respuesta;
     }
