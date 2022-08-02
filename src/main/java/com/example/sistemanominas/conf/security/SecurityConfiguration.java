@@ -64,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(this.entryPoint).and()
                 .authorizeRequests(
                         (request) -> request.antMatchers("/auth/api/v1/*", "/", "/assets/*").permitAll()
-                                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .antMatchers( "/**").hasAuthority("administrador")
                                 .anyRequest().authenticated()
                 )
 
