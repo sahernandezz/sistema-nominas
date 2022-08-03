@@ -34,7 +34,7 @@ public class UsuarioServiceImpl {
             if (usuario.isPresent()) {
                 usuario.get().setPermisos(listaPermisos);
                 usuario = this.usuarioRepository.guardar(usuario.get());
-                respuesta = new ObjectDto(Optional.ofNullable(usuario));
+                respuesta = new ObjectDto(usuario);
             }else {
                 respuesta = new ObjectDto("No se pudo guardar el usuario");
             }
@@ -59,7 +59,7 @@ public class UsuarioServiceImpl {
                 }
 
                 Optional<Usuario> usuarioActualizado = this.usuarioRepository.guardar(u);
-                respuesta = usuarioActualizado.isPresent() ? new ObjectDto(Optional.of(usuarioActualizado))
+                respuesta = usuarioActualizado.isPresent() ? new ObjectDto(usuarioActualizado)
                         : new ObjectDto("No se pudo actualizar el usuario");
             }
         }else{

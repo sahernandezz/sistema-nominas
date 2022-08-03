@@ -6,10 +6,10 @@ import java.util.Optional;
 
 @Data
 public class ObjectDto {
-    private Optional<Object> object = Optional.empty();
+    private Optional<?> object = Optional.empty();
     private String message = "";
 
-    public ObjectDto(Optional<Object> Object) {
+    public ObjectDto(Optional<?> Object) {
         this.object = Object;
     }
 

@@ -19,7 +19,7 @@ public class FormatoArchivoServiceImpl {
         ObjectDto respuesta;
         if (this.formatoArchivoRepository.findByDescripcion(f.getDescripcion()).isEmpty()) {
             Optional<FormatoArchivo> guardar = this.formatoArchivoRepository.guardar(f);
-            respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
+            respuesta = guardar.isPresent() ? new ObjectDto(guardar)
                     : new ObjectDto("No se pudo guardar");
         } else {
             respuesta = new ObjectDto("La descripción ya se encuentra registrada");

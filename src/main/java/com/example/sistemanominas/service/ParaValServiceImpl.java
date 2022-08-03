@@ -29,7 +29,7 @@ public class ParaValServiceImpl {
 
         if (respuesta == null) {
             Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
-            respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(guardar))
+            respuesta = guardar.isPresent() ? new ObjectDto(guardar)
                     : new ObjectDto("No se pudo guardar");
         }
 

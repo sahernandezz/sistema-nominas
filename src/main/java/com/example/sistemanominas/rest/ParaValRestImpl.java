@@ -27,7 +27,7 @@ public class ParaValRestImpl {
         try {
             List<ParaVal> lista = this.paraValService.listaParaVal();
             respuesta = lista.isEmpty() ? new ResponseEntity<>(lista, HttpStatus.NO_CONTENT)
-                    : new ResponseEntity<>(lista,HttpStatus.OK);
+                    : new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(Map.of("message", "Ocurrió un error :("), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -35,7 +35,7 @@ public class ParaValRestImpl {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearParVal(@RequestBody ParaVal paraVal) {
+    public ResponseEntity<?> crearParVal(@RequestBody final ParaVal paraVal) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto guardar = this.paraValService.guardarParaVal(paraVal);
@@ -48,7 +48,7 @@ public class ParaValRestImpl {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarParVal(@RequestBody ParaVal paraVal) {
+    public ResponseEntity<?> actualizarParVal(@RequestBody final ParaVal paraVal) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto actualizar = this.paraValService.actualizarParVal(paraVal);
@@ -61,7 +61,7 @@ public class ParaValRestImpl {
     }
 
     @PutMapping("/estado")
-    public ResponseEntity<?> estadoParaVal(@RequestBody Integer id) {
+    public ResponseEntity<?> estadoParaVal(@RequestBody final Integer id) {
         ResponseEntity<?> respuesta;
         try {
             if (id != null) {

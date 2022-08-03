@@ -19,7 +19,7 @@ public class AuthenticationRestImpl {
     private AuthenticationServiceImpl authenticationService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> login(@RequestBody final AuthRequest authRequest) {
         ResponseEntity<?> respuesta;
         try {
             if (!authRequest.getLogin().isEmpty() && !authRequest.getClave().isEmpty()) {

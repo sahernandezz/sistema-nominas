@@ -47,7 +47,7 @@ public class FormatoArchivoRestImpl {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearFormatoArchivo(@RequestBody FormatoArchivo formatoArchivo) {
+    public ResponseEntity<?> crearFormatoArchivo(@RequestBody final FormatoArchivo formatoArchivo) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto guardar = this.formatoArchivoService.guardarFormatoArchivo(formatoArchivo);
@@ -60,7 +60,7 @@ public class FormatoArchivoRestImpl {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarFormatoArchivo(@RequestBody FormatoArchivo formatoArchivo) {
+    public ResponseEntity<?> actualizarFormatoArchivo(@RequestBody final FormatoArchivo formatoArchivo) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto actualizar = this.formatoArchivoService.actualizarFormatoArchivo(formatoArchivo);
@@ -73,7 +73,7 @@ public class FormatoArchivoRestImpl {
     }
 
     @PutMapping("/estado")
-    public ResponseEntity<?> estadoFormatoArchivo(@RequestBody Integer id) {
+    public ResponseEntity<?> estadoFormatoArchivo(@RequestBody final Integer id) {
         ResponseEntity<?> respuesta;
         try {
             if (id != null) {

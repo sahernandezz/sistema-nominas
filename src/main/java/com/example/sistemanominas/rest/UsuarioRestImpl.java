@@ -32,7 +32,7 @@ public class UsuarioRestImpl {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> crearUsuario(@RequestBody final Usuario usuario) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto guardar = this.usuarioService.guardarUsuario(usuario);
@@ -45,7 +45,7 @@ public class UsuarioRestImpl {
     }
 
     @PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> actualizarUsuario(@RequestBody final Usuario usuario) {
         ResponseEntity<?> respuesta;
         try {
             ObjectDto actualizar = this.usuarioService.actualizarUsuario(usuario);
@@ -58,7 +58,7 @@ public class UsuarioRestImpl {
     }
 
     @PutMapping("/estado")
-    public ResponseEntity<?> estadoUsuario(@RequestBody Integer id) {
+    public ResponseEntity<?> estadoUsuario(@RequestBody final Integer id) {
         ResponseEntity<?> respuesta;
         try {
             if (id != null) {
