@@ -1,0 +1,26 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row">
+        <div class="div-center">
+          <h1 class="text-white">Cargar Archivos</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow p-4">
+        <form class="div-form div-center" (submit)="this.subirArchivo($event)">
+          <input class="form-control" type="file"  accept="application/vnd.ms-excel,
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+          <input class="form-control" type="submit" value="Subir">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

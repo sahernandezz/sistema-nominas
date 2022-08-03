@@ -30,10 +30,7 @@ export class FormatoArchivoComponent implements OnInit {
     this.httpFormulario.listaFormularios().subscribe((data) => {
       this.dataSource.data = data;
     }, (error) => {
-      if (error.status === 401) {
-        localStorage.clear();
-        this.router.navigate(['/login']).then(e => null);
-      }
+      this.error401(error.status, null);
     });
   }
 
@@ -175,9 +172,10 @@ export class FormatoArchivoComponent implements OnInit {
 
   error401(error: any, mensaje: any): void {
     if (error.status === 401) {
-      this.open(mensaje);
-      this.mensaje = 'Sesión caducada';
       localStorage.clear();
+      this.modalService.dismissAll('Cross click');
+      this.mensaje = 'Sesión caducada';
+      this.open(mensaje);
       this.router.navigate(['/login']).then(ex => null);
     }
   }

@@ -11,6 +11,7 @@ import { UserProfileComponent } from '../../pages/user-profile/user-profile.comp
 import { UsuariosComponent } from '../../pages/usuarios/usuarios.component';
 import { FormatoArchivoComponent } from '../../pages/formato-archivo/formato-archivo.component';
 import { ParValComponent } from '../../pages/par-val/par-val.component';
+import { CargaArchivoComponent } from '../../pages/carga-archivo/carga-archivo.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ComponentsModule} from '../../components/components.module';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -42,7 +43,8 @@ import {MatInputModule} from '@angular/material/input';
     UserProfileComponent,
     UsuariosComponent,
     FormatoArchivoComponent,
-    ParValComponent
+    ParValComponent,
+    CargaArchivoComponent
   ]
 })
 
