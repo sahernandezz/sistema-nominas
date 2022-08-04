@@ -38,7 +38,7 @@ public class CargaArchivo implements Serializable {
     @Column(name = "total_registros", nullable = false)
     private Integer tRegistros = 0;
 
-    @Column(name = "total_registros", nullable = false)
+    @Column(name = "registros_validos", nullable = false)
     private Integer rValidos = 0;
 
     @Column(name = "conteo_errores")

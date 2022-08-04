@@ -14,13 +14,22 @@
   <div class="row">
     <div class="col">
       <div class="card shadow p-4">
-        <form class="div-form div-center" (submit)="this.subirArchivo($event)">
-          <input class="form-control" type="file"  accept="application/vnd.ms-excel,
-          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-          <input class="form-control" type="submit" value="Subir">
-        </form>
+        <input class="input-file" value="{{this.file}}" type="file" accept="application/vnd.ms-excel,
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" (change)="this.onFileSelected($event)"
+               required>
+        <input class="btn btn-primary" (submit)="this.subirArchivo($event,content_mensaje)" type="submit"
+               value="Subir">
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #content_mensaje let-modal>
+  <div class="div-buscar mt-4 ml-4 mr-4">
+    <h1 class="text-gray">{{this.mensaje}}</h1>
+  </div>
+  <div class="div-buscar mb-4 ml-4 mr-4">
+    <button (click)="modal.dismiss('Cross click')" type="button" class="btn btn-outline-default">Cerrar</button>
+  </div>
+</ng-template>
 

@@ -137,7 +137,7 @@ const colors = {
   },
   theme: {
     'default': '#172b4d',
-    'primary': '#5e72e4',
+    'primary': '#001fdc',
     'secondary': '#f4f5f7',
     'info': '#11cdef',
     'success': '#2dce89',
