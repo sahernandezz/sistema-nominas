@@ -1,7 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {AppComponent} from '../../app.component';
 import {Injectable} from '@angular/core';
-import {ROUTES} from '../../components/sidebar/sidebar.component';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LoginHttp} from '../../shared/services/login';
 
@@ -39,15 +38,15 @@ export class LoginComponent implements OnInit, OnDestroy {
                 clave: HTMLInputElement): void {
     this.buttonSummit = true;
     this.httpLogin.login(auth).subscribe((data) => {
-        localStorage.setItem('USER_KEY', data.object.token);
-        group_usuario.classList.add('has-success');
-        group_clave.classList.add('has-success');
-        usuario.disabled = true;
-        clave.disabled = true;
-        this.app.setUsuario(data.object['usuario']);
-        setTimeout(() => {
-          this.router.navigate([ROUTES[0].path]).then(e => null);
-        }, 1000);
+      localStorage.setItem('USER_KEY', data.object.token);
+      group_usuario.classList.add('has-success');
+      group_clave.classList.add('has-success');
+      usuario.disabled = true;
+      clave.disabled = true;
+      this.app.setUsuario(data.object['usuario']);
+      setTimeout(() => {
+        this.router.navigate([this.app.getRoutes()[0].path]).then(e => null);
+      }, 1000);
     }, (error) => {
       if (error.status === 400) {
         this.buttonSummit = false;

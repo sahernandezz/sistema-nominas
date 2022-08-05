@@ -1,5 +1,4 @@
-import {Component, OnInit, ElementRef, HostListener} from '@angular/core';
-import {ROUTES} from '../sidebar/sidebar.component';
+import {Component, OnInit, ElementRef} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {AppComponent} from '../../app.component';
@@ -21,7 +20,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listTitles = ROUTES.filter(listTitle => listTitle);
+    this.listTitles = this.app.getRoutes().filter(listTitle => listTitle);
   }
 
   getTitle() {
