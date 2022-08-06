@@ -20,12 +20,12 @@ public class CargaArchivoRestImpl {
     private CargaArchivoServiceImpl cargaArchivoService;
 
     @PostMapping(value = "/validar")
-    public ResponseEntity<?> guardarCargaArchivo(@RequestBody final MultipartFile file, final Principal nombreUsuario) {
+    public ResponseEntity<?> validarArchivo(@RequestBody final MultipartFile file, final Principal nombreUsuario) {
         ResponseEntity<?> respuesta;
         try {
             if (file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     || file.getContentType().equals("application/vnd.ms-excel")) {
-                ObjectDto guardar = this.cargaArchivoService.guardarCargaArchivo(file, nombreUsuario.getName());
+                ObjectDto guardar = this.cargaArchivoService.validarArchivo(file, nombreUsuario.getName());
                 respuesta = guardar.getObject().isPresent() ? new ResponseEntity<>(Map.of("message", "Archivo cargado correctamente"), HttpStatus.OK)
                         : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);
             } else {
