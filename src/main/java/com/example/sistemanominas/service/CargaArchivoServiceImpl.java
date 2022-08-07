@@ -75,28 +75,28 @@ public class CargaArchivoServiceImpl {
         switch (p.getTipoDato()) {
             case ParaVal.STRING -> {
                 if (!x.getCellType().equals(CellType.STRING)) {
-                    respuesta = ("El campo debe ser texto");
+                    respuesta = "El campo debe ser texto";
                 }
             }
             case ParaVal.NUMBER -> {
                 if (!x.getCellType().equals(CellType.NUMERIC)) {
-                    respuesta = ("El campo debe ser un número");
+                    respuesta = "El campo debe ser un número";
                 }
             }
             case ParaVal.DATE -> {
                 if (!x.getCellType().equals(CellType.STRING)) {
-                    respuesta = ("El campo debe ser una fecha");
+                    respuesta = "El campo debe ser una fecha";
                 } else {
                     try {
                         new SimpleDateFormat(p.getValorPer()).parse(x.getRawValue());
                     } catch (ParseException e) {
-                        respuesta = ("El campo debe tener el formato " + p.getValorPer());
+                        respuesta = "El campo debe tener el formato " + p.getValorPer();
                     }
                 }
             }
             default -> {
                 if (x.getCellType().equals(CellType.BLANK)) {
-                    respuesta = ("El campo esta vació");
+                    respuesta = "El campo esta vació";
                 }
             }
         }

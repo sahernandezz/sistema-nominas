@@ -30,9 +30,7 @@ public class ParaVal implements Serializable {
     private Integer id;
     public final static String ENCE = "ENCE";
     public final static String ENCD = "ENCD";
-
     public final static String DETE = "DETE";
-
     public final static String DETD = "DETD";
 
     @Column(name = "tipo")

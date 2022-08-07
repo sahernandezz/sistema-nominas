@@ -23,10 +23,6 @@ public class ParaValServiceImpl {
     public ObjectDto guardarParaVal(final ParaVal r) {
         ObjectDto respuesta = this.validacionesGuardarParaVal(r);
 
-        if (r.getTipo().equals(ParaVal.ENCE) || r.getTipo().equals(ParaVal.ENCD)) {
-            r.setColumna(null);
-        }
-
         if (respuesta == null) {
             Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
             respuesta = guardar.isPresent() ? new ObjectDto(guardar)
@@ -48,11 +44,17 @@ public class ParaValServiceImpl {
             if (r.getCelda().isEmpty()) {
                 respuesta = new ObjectDto("El campo celda no puede estar vació");
             }
-        } else if (r.getColumna().matches(".*[0-9].*")) {
+            if (!r.getColumna().isEmpty()) {
+                respuesta = new ObjectDto("No se permite el ingreso de datos en el campo de la columna");
+            }
+        }
+        if (r.getColumna().matches(".*[0-9].*")) {
             respuesta = new ObjectDto("No se permiten números en el campo columna");
-        } else if (r.getColumna().length() > 2) {
+        }
+        if (r.getColumna().length() > 2) {
             respuesta = new ObjectDto("Valor incorrecto en el campo columna");
-        }else if (r.getCelda().length() > 5) {
+        }
+        if (r.getCelda().length() > 5) {
             respuesta = new ObjectDto("Valor incorrecto en el campo celda");
         }
         return respuesta;
