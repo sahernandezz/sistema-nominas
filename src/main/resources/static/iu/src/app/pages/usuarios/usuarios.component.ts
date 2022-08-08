@@ -168,7 +168,7 @@ export class UsuariosComponent implements OnInit {
     const from_group_select = document.getElementById('from_group_' + 'permisos') as HTMLInputElement || null;
     const text_select = document.getElementById('text_' + 'permisos') as HTMLInputElement || null;
 
-    if (select.value === '0') {
+    if (select.value === 'null') {
       from_group_select.classList.add('has-danger');
       text_select.innerText = 'Selección no valida';
     } else {

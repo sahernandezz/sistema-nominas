@@ -109,7 +109,7 @@
         <div class="form-group col-md-12" id="from_group_permisos">
           <label for="permisos">Permisos <span class="text-red">*</span></label>
           <select class="form-control" id="permisos">
-            <option value="0">Seleccióne...</option>
+            <option value="null">Seleccióne...</option>
             <option
               [selected]="eventoUsuario['estado'] === 'U' ? eventoUsuario['usuario']['permisos'][0]['id'] ===  rol.id: false"
               *ngFor="let rol of dataPermisos" value="{{parse(rol)}}">{{rol.nombre}}</option>

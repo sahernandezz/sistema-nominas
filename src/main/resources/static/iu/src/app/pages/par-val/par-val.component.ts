@@ -134,18 +134,33 @@ export class ParValComponent implements OnInit {
   selectInput(): Object {
     const ObjectResult = {};
     let i = 0;
-    const listaInput = ['celda', 'columna', 'valorPer', 'expreSql', 'tipo', 'tipoDato', 'formatoArchivo'];
-    for (const label of listaInput) {
-      const input = document.getElementById(label) as HTMLInputElement || null;
-      const from_group = document.getElementById('from_group_' + label) as HTMLInputElement || null;
-      const text = document.getElementById('text_' + label) as HTMLInputElement || null;
-      if (input.value === null || input.value === '' || input.value === '0') {
-        from_group.classList.add('has-danger');
-        text.innerText = 'Campo vació';
+    const listaInput = [
+      {label: 'celda', isRequired: true},
+      {label: 'columna', isRequired: false},
+      {label: 'valorPer', isRequired: false},
+      {label: 'expreSql', isRequired: false},
+      {label: 'tipo', isRequired: true},
+      {label: 'tipoDato', isRequired: true},
+      {label: 'formatoArchivo', isRequired: true}
+    ];
+    for (const item of listaInput) {
+      const input = document.getElementById(item.label) as HTMLInputElement || null;
+      const from_group = document.getElementById('from_group_' + item.label) as HTMLInputElement || null;
+      const text = document.getElementById('text_' + item.label) as HTMLInputElement || null;
+      if (item.isRequired) {
+        if (input.value === null || input.value === '' || input.value === 'null') {
+          from_group.classList.add('has-danger');
+          text.innerText = 'Campo vació';
+        } else {
+          i++;
+          from_group.classList.remove('has-danger');
+          ObjectResult[item.label] = input.value;
+          text.innerText = '';
+        }
       } else {
         i++;
         from_group.classList.remove('has-danger');
-        ObjectResult[label] = input.value;
+        ObjectResult[item.label] = input.value === '' ? undefined : input.value;
         text.innerText = '';
       }
     }

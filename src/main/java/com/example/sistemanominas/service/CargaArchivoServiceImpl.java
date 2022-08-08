@@ -7,6 +7,7 @@ import com.example.sistemanominas.model.ParaVal;
 import com.example.sistemanominas.repository.CargaArchivoRepositoryImpl;
 import com.example.sistemanominas.repository.ParaValRepositoryImpl;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -40,12 +41,10 @@ public class CargaArchivoServiceImpl {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet sheet = workbook.getSheetAt(0);
             listaErrores.addAll(this.tipo_ENCE(sheet, lista_ENCE));
-            Optional<CargaArchivo> guardar = this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
-            respuesta = guardar.isPresent()
-                    ? listaErrores.isEmpty()
+            this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
+            respuesta = listaErrores.isEmpty()
                     ? new ObjectDto("El archivo no tiene inconsistencias")
-                    : new ObjectDto(Optional.of(listaErrores))
-                    : new ObjectDto(Optional.of(listaErrores), "No se pudo hacer el registro de la validación");
+                    : new ObjectDto(Optional.of(listaErrores), "Se detectaron inconsistencias en el archivo");
         } else {
             respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación la que no hay parámetros registrados");
         }
@@ -108,13 +107,22 @@ public class CargaArchivoServiceImpl {
 
     private String validarString(final XSSFCell valor, final String valorPer) {
         String respuesta = null;
-        if (!valor.getCellType().equals(CellType.STRING)) {
-            respuesta = "El campo debe ser texto";
-        } else {
-            if (!valor.getStringCellValue().equals(valorPer)) {
-                respuesta = "Valor no permitido debe ser (" + valorPer + ")";
+        String valorPermitido = "Valor no permitido debe ser (" + valorPer + ")";
+        if (valor.getCellType().equals(CellType.STRING)) {
+            if (valorPer.contains(",")) {
+                if (!Arrays.asList(valorPer.replace(" ", "").split(","))
+                        .contains(new DataFormatter().formatCellValue(valor).trim())) {
+                    respuesta = valorPermitido;
+                }
+            } else {
+                if (!valor.getStringCellValue().trim().equals(valorPer)) {
+                    respuesta = valorPermitido;
+                }
             }
+        } else {
+            respuesta = "El valor no es texto";
         }
+
         return respuesta;
     }
 
@@ -128,16 +136,12 @@ public class CargaArchivoServiceImpl {
 
     private String validarDate(final XSSFCell valor, String valorPer) {
         String respuesta = null;
-        if (!valor.getCellType().equals(CellType.NUMERIC)) {
-            respuesta = "El campo debe ser una fecha";
-        } else {
-            System.out.println(valor.getDateCellValue());
-            try {
-                new SimpleDateFormat(valorPer).parse(valor.getDateCellValue().toString());
-            } catch (ParseException e) {
-                respuesta = "El campo debe tener el formato " + valorPer;
-            }
+        try {
+            new SimpleDateFormat(valorPer).parse(new DataFormatter().formatCellValue(valor).trim());
+        } catch (ParseException e) {
+            respuesta = "El campo debe tener el formato " + valorPer;
         }
+
         return respuesta;
     }
 

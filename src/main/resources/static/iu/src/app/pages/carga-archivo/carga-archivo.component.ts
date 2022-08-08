@@ -24,11 +24,11 @@ export class CargaArchivoComponent implements OnInit {
   }
 
   open(content: any) {
-    this.modalService.open(content, {centered: true, ariaLabelledBy: 'modal-basic-title', backdrop: 'static'});
+      this.modalService.open(content, {centered: true, ariaLabelledBy: 'modal-basic-title', backdrop: 'static'});
   }
 
   onFileSelected(e: any): void {
-    this.file = e.target;
+      this.file = e.target;
   }
 
   subirArchivo(e: Event, content_mensaje: any): void {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -22,6 +23,10 @@ public class ParaValServiceImpl {
 
     public ObjectDto guardarParaVal(final ParaVal r) {
         ObjectDto respuesta = this.validacionesGuardarParaVal(r);
+
+        if (!r.getColumna().isEmpty()) {
+            r.setColumna(r.getColumna().toLowerCase(Locale.ROOT));
+        }
 
         if (respuesta == null) {
             Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
@@ -49,12 +54,20 @@ public class ParaValServiceImpl {
 //            }
         }
 
+        try {
+            Integer.parseInt(r.getCelda());
+        } catch (NumberFormatException e) {
+            respuesta = new ObjectDto("Solo se permiten números en el campo celda");
+        }
+
         if (r.getColumna().matches("-?\\d+(\\.\\d+)?")) {
             respuesta = new ObjectDto("No se permiten números en el campo columna");
         } else if (r.getColumna().length() > 2) {
             respuesta = new ObjectDto("Valor incorrecto en el campo columna");
         } else if (r.getCelda().length() > 5) {
             respuesta = new ObjectDto("Valor incorrecto en el campo celda");
+        } else if (r.getCelda().equals("0")) {
+            respuesta = new ObjectDto("El 0 no es un valor valido en el campo celda");
         }
         return respuesta;
     }
