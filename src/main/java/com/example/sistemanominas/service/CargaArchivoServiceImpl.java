@@ -33,16 +33,24 @@ public class CargaArchivoServiceImpl {
 
 
     public ObjectDto validarArchivo(final MultipartFile file, final String nombreUsuario) throws IOException {
-        List<ErrorParVal> listaErrores = new ArrayList<>();
-        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        listaErrores.addAll(this.tipo_ENCE(sheet));
-        this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
+        ObjectDto respuesta;
+        List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE);
+        if (!lista_ENCE.isEmpty()) {
+            List<ErrorParVal> listaErrores = new ArrayList<>();
+            XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            listaErrores.addAll(this.tipo_ENCE(sheet, lista_ENCE));
+            Optional<CargaArchivo> guardar = this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
+            respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(listaErrores))
+                    : new ObjectDto(Optional.of(listaErrores), "No se pudo hacer el registro de la validación");
+        }else {
+            respuesta = new ObjectDto("No se puede hacer la validación la que no hay parámetros registrados");
+        }
+        return respuesta;
     }
 
-    private List<ErrorParVal> tipo_ENCE(final XSSFSheet sheet) {
+    private List<ErrorParVal> tipo_ENCE(final XSSFSheet sheet, final List<ParaVal> lista) {
         List<ErrorParVal> listaErrores = new ArrayList<>();
-        List<ParaVal> lista = this.paraValRepository.lista(ParaVal.ENCE);
         if (!lista.isEmpty()) {
             lista.forEach(paraVal -> {
                 XSSFCell c = sheet.getRow(Integer.parseInt(paraVal.getCelda()) - 1)
@@ -74,25 +82,13 @@ public class CargaArchivoServiceImpl {
         Object respuesta = null;
         switch (p.getTipoDato()) {
             case ParaVal.STRING -> {
-                if (!x.getCellType().equals(CellType.STRING)) {
-                    respuesta = "El campo debe ser texto";
-                }
+                respuesta = this.validarString(x.getCellType());
             }
             case ParaVal.NUMBER -> {
-                if (!x.getCellType().equals(CellType.NUMERIC)) {
-                    respuesta = "El campo debe ser un número";
-                }
+                respuesta = this.validarNumeric(x.getCellType());
             }
             case ParaVal.DATE -> {
-                if (!x.getCellType().equals(CellType.STRING)) {
-                    respuesta = "El campo debe ser una fecha";
-                } else {
-                    try {
-                        new SimpleDateFormat(p.getValorPer()).parse(x.getRawValue());
-                    } catch (ParseException e) {
-                        respuesta = "El campo debe tener el formato " + p.getValorPer();
-                    }
-                }
+                respuesta = this.validarDate(x, p.getValorPer());
             }
             default -> {
                 if (x.getCellType().equals(CellType.BLANK)) {
@@ -100,15 +96,50 @@ public class CargaArchivoServiceImpl {
                 }
             }
         }
+
         if (respuesta != null) {
-            ErrorParVal error = new ErrorParVal();
-            error.setColumna(p.getColumna());
-            error.setCelda(p.getCelda());
-            error.setTipo(tipo);
-            error.setMensaje((String) respuesta);
-            respuesta = error;
+            respuesta = this.nuevoErrorParVal(tipo, p, respuesta.toString());
         }
         return (ErrorParVal) respuesta;
+    }
+
+    private String validarString(final CellType valor) {
+        String respuesta = null;
+        if (!valor.equals(CellType.STRING)) {
+            respuesta = "El campo debe ser texto";
+        }
+        return respuesta;
+    }
+
+    private String validarNumeric(final CellType valor) {
+        String respuesta = null;
+        if (!valor.equals(CellType.NUMERIC)) {
+            respuesta = "El campo debe ser un número";
+        }
+        return respuesta;
+    }
+
+    private String validarDate(final XSSFCell valor, String valorPer) {
+        String respuesta = null;
+        if (!valor.getCellType().equals(CellType.STRING)) {
+            respuesta = "El campo debe ser una fecha";
+        } else {
+            try {
+                new SimpleDateFormat(valorPer).parse(valor.getRawValue());
+            } catch (ParseException e) {
+                respuesta = "El campo debe tener el formato " + valorPer;
+            }
+        }
+        return respuesta;
+    }
+
+    private ErrorParVal nuevoErrorParVal(final String tipo, final ParaVal p, final String mensaje) {
+        ErrorParVal error = new ErrorParVal();
+        error.setColumna(p.getColumna());
+        error.setCelda(p.getCelda());
+        error.setTipo(tipo);
+        error.setMensaje(mensaje);
+        return error;
     }
 
     private Optional<CargaArchivo> guardarValidacion(final String fileName, final String username, final int errores) {

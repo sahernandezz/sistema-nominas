@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/carga-archivo/api/v1")
@@ -23,10 +24,10 @@ public class CargaArchivoRestImpl {
     public ResponseEntity<?> validarArchivo(@RequestBody final MultipartFile file, final Principal nombreUsuario) {
         ResponseEntity<?> respuesta;
         try {
-            if (file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    || file.getContentType().equals("application/vnd.ms-excel")) {
+            if (Objects.equals(file.getContentType(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    || Objects.equals(file.getContentType(), "application/vnd.ms-excel")) {
                 ObjectDto guardar = this.cargaArchivoService.validarArchivo(file, nombreUsuario.getName());
-                respuesta = guardar.getObject().isPresent() ? new ResponseEntity<>(Map.of("message", "Archivo cargado correctamente"), HttpStatus.OK)
+                respuesta = guardar.getMessage().isEmpty() ? new ResponseEntity<>(guardar, HttpStatus.OK)
                         : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);
             } else {
                 respuesta = new ResponseEntity<>(Map.of("message", "El formato no esta soportado solo se permiten (xlsx, xls)"), HttpStatus.BAD_REQUEST);
