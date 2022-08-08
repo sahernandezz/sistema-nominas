@@ -36,12 +36,12 @@ export class CargaArchivoComponent implements OnInit {
     if (this.file != null) {
       this.httpCargaArchivo.guardarValidacionArchivo(this.file.files[0]).subscribe((respuesta) => {
         this.file = null;
-        console.log(respuesta);
         this.mensajeModal(content_mensaje, respuesta.message);
       }, (error) => {
         console.log(error);
         this.error401(error, null);
         if (error.status === 400 || error.status === 500) {
+          this.file = null;
           this.mensaje = error.error.message;
           this.open(content_mensaje);
         }

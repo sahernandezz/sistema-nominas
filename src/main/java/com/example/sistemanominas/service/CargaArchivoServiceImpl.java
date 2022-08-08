@@ -111,7 +111,7 @@ public class CargaArchivoServiceImpl {
         if (!valor.getCellType().equals(CellType.STRING)) {
             respuesta = "El campo debe ser texto";
         } else {
-            if (!valor.getRawValue().equals(valorPer)) {
+            if (!valor.getStringCellValue().equals(valorPer)) {
                 respuesta = "Valor no permitido debe ser (" + valorPer + ")";
             }
         }
@@ -128,11 +128,12 @@ public class CargaArchivoServiceImpl {
 
     private String validarDate(final XSSFCell valor, String valorPer) {
         String respuesta = null;
-        if (!valor.getCellType().equals(CellType.STRING)) {
+        if (!valor.getCellType().equals(CellType.NUMERIC)) {
             respuesta = "El campo debe ser una fecha";
         } else {
+            System.out.println(valor.getDateCellValue());
             try {
-                new SimpleDateFormat(valorPer).parse(valor.getRawValue());
+                new SimpleDateFormat(valorPer).parse(valor.getDateCellValue().toString());
             } catch (ParseException e) {
                 respuesta = "El campo debe tener el formato " + valorPer;
             }
