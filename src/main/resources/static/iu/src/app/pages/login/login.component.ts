@@ -65,10 +65,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       (usuario.value == null || usuario.value === '') ? group_usuario.classList.add('has-danger') : group_usuario.classList.remove('has-danger');
       (clave.value == null || clave.value === '') ? group_clave.classList.add('has-danger') : group_clave.classList.remove('has-danger');
 
-      this.login({
-        login: usuario.value,
-        clave: clave.value
-      }, usuario, group_usuario, group_clave, clave);
+      if (usuario.value !== null && usuario.value !== ''
+        && clave.value !== null && clave.value !== '') {
+        this.login({
+          login: usuario.value,
+          clave: clave.value
+        }, usuario, group_usuario, group_clave, clave);
+      }
     } catch (e) {
       this.buttonSummit = false;
     }

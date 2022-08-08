@@ -22,11 +22,11 @@ public class ParaValRepositoryImpl {
         return this.jpa.findAll();
     }
 
-    public Optional<ParaVal> paraValPorId(final Integer id){
+    public Optional<ParaVal> paraValPorId(final Integer id) {
         return this.jpa.findById(id);
     }
 
     public List<ParaVal> lista(final String tipo) {
-        return this.jpa.findAllByTipoOrderById(tipo);
+        return this.jpa.findAllByTipoAndEstadoOrderById(tipo, ParaVal.ACTIVO);
     }
 }

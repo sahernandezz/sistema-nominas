@@ -34,17 +34,20 @@ public class CargaArchivoServiceImpl {
 
     public ObjectDto validarArchivo(final MultipartFile file, final String nombreUsuario) throws IOException {
         ObjectDto respuesta;
+        List<ErrorParVal> listaErrores = new ArrayList<>();
         List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE);
         if (!lista_ENCE.isEmpty()) {
-            List<ErrorParVal> listaErrores = new ArrayList<>();
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet sheet = workbook.getSheetAt(0);
             listaErrores.addAll(this.tipo_ENCE(sheet, lista_ENCE));
             Optional<CargaArchivo> guardar = this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
-            respuesta = guardar.isPresent() ? new ObjectDto(Optional.of(listaErrores))
+            respuesta = guardar.isPresent()
+                    ? listaErrores.isEmpty()
+                    ? new ObjectDto("El archivo no tiene inconsistencias")
+                    : new ObjectDto(Optional.of(listaErrores))
                     : new ObjectDto(Optional.of(listaErrores), "No se pudo hacer el registro de la validación");
-        }else {
-            respuesta = new ObjectDto("No se puede hacer la validación la que no hay parámetros registrados");
+        } else {
+            respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación la que no hay parámetros registrados");
         }
         return respuesta;
     }
@@ -82,7 +85,7 @@ public class CargaArchivoServiceImpl {
         Object respuesta = null;
         switch (p.getTipoDato()) {
             case ParaVal.STRING -> {
-                respuesta = this.validarString(x.getCellType());
+                respuesta = this.validarString(x, p.getValorPer());
             }
             case ParaVal.NUMBER -> {
                 respuesta = this.validarNumeric(x.getCellType());
@@ -103,10 +106,14 @@ public class CargaArchivoServiceImpl {
         return (ErrorParVal) respuesta;
     }
 
-    private String validarString(final CellType valor) {
+    private String validarString(final XSSFCell valor, final String valorPer) {
         String respuesta = null;
-        if (!valor.equals(CellType.STRING)) {
+        if (!valor.getCellType().equals(CellType.STRING)) {
             respuesta = "El campo debe ser texto";
+        } else {
+            if (!valor.getRawValue().equals(valorPer)) {
+                respuesta = "Valor no permitido debe ser (" + valorPer + ")";
+            }
         }
         return respuesta;
     }

@@ -27,7 +27,7 @@ public class CargaArchivoRestImpl {
             if (Objects.equals(file.getContentType(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     || Objects.equals(file.getContentType(), "application/vnd.ms-excel")) {
                 ObjectDto guardar = this.cargaArchivoService.validarArchivo(file, nombreUsuario.getName());
-                respuesta = guardar.getMessage().isEmpty() ? new ResponseEntity<>(guardar, HttpStatus.OK)
+                respuesta = guardar.getObject().isEmpty() ? new ResponseEntity<>(guardar, HttpStatus.OK)
                         : new ResponseEntity<>(guardar, HttpStatus.BAD_REQUEST);
             } else {
                 respuesta = new ResponseEntity<>(Map.of("message", "El formato no esta soportado solo se permiten (xlsx, xls)"), HttpStatus.BAD_REQUEST);

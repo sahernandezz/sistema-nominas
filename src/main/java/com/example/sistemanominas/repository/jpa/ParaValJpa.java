@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ParaValJpa extends JpaRepository<ParaVal, Integer> {
-    public List<ParaVal> findAllByTipoOrderById(String tipo);
+    public List<ParaVal> findAllByTipoAndEstadoOrderById(String tipo, String estado);
 }

@@ -44,10 +44,12 @@ public class ParaValServiceImpl {
             if (r.getCelda().isEmpty()) {
                 respuesta = new ObjectDto("El campo celda no puede estar vació");
             }
-            if (!r.getColumna().isEmpty()) {
-                respuesta = new ObjectDto("No se permite el ingreso de datos en el campo de la columna");
-            }
-        } else if (r.getColumna().matches(".*[0-9].*")) {
+//            if (!r.getColumna().isEmpty()) {
+//                respuesta = new ObjectDto("No se permite el ingreso de datos en el campo de la columna");
+//            }
+        }
+
+        if (r.getColumna().matches("-?\\d+(\\.\\d+)?")) {
             respuesta = new ObjectDto("No se permiten números en el campo columna");
         } else if (r.getColumna().length() > 2) {
             respuesta = new ObjectDto("Valor incorrecto en el campo columna");
