@@ -30,7 +30,7 @@ public class CargaArchivoServiceImpl {
     @Autowired
     private ParaValRepositoryImpl paraValRepository;
 
-    private final static char[] LETRAS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    private final static String[] LETRAS = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".toUpperCase().split(",");
 
 
     public ObjectDto validarArchivo(final MultipartFile file, final String nombreUsuario) throws IOException {
@@ -56,7 +56,7 @@ public class CargaArchivoServiceImpl {
         if (!lista.isEmpty()) {
             lista.forEach(paraVal -> {
                 XSSFCell c = sheet.getRow(Integer.parseInt(paraVal.getCelda()) - 1)
-                        .getCell(this.obtenerIndiceColumna(paraVal.getColumna().trim().toLowerCase(), LETRAS, 0, 0));
+                        .getCell(this.obtenerIndiceColumna(paraVal.getColumna(), LETRAS, 0, 0));
                 ErrorParVal error = this.validarCampo(c, paraVal, ParaVal.ENCE);
                 if (error != null) {
                     listaErrores.add(error);
@@ -66,18 +66,18 @@ public class CargaArchivoServiceImpl {
         return listaErrores;
     }
 
-    private int obtenerIndiceColumna(final String columna, char[] letras, int n, int letraLen) {
-        for (char letra : letras) {
-            if (columna.equals(String.valueOf(letra).toLowerCase())) {
+    private int obtenerIndiceColumna(final String columna, String[] letras, int n, int letraLen) {
+        for (String letra : letras) {
+            if (columna.equals(letra)) {
                 return n;
             } else {
                 n++;
             }
         }
-
-        char[] letrasPalabra = new char[letras.length];
-        IntStream.range(0, letras.length).forEach(i -> letrasPalabra[i] = (char) (letras[i] + letras[letraLen]));
-        return obtenerIndiceColumna(columna, letrasPalabra, n, letraLen + 1);
+        return this.obtenerIndiceColumna(columna,
+                IntStream.range(0, letras.length).mapToObj(i ->
+                        LETRAS[letraLen] + LETRAS[i]
+                ).toArray(String[]::new), n, letraLen + 1);
     }
 
     private ErrorParVal validarCampo(final XSSFCell x, final ParaVal p, final String tipo) {

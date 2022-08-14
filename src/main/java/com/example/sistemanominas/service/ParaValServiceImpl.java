@@ -25,7 +25,7 @@ public class ParaValServiceImpl {
         ObjectDto respuesta = this.validacionesGuardarParaVal(r);
 
         if (!r.getColumna().isEmpty()) {
-            r.setColumna(r.getColumna().toLowerCase(Locale.ROOT));
+            r.setColumna(r.getColumna().toUpperCase().trim());
         }
 
         if (respuesta == null) {
