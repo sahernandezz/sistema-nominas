@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CargaArchivoHttp} from '../../shared/services/CargaArchivo';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-carga-archivo',
@@ -12,6 +14,10 @@ export class CargaArchivoComponent implements OnInit {
 
   mensaje: String = '';
   file: any = null;
+  tablaErrors: boolean = false;
+  dataSource = new MatTableDataSource<ErrorArchivo>([]);
+  displayedColumns: string[] = ['Celda', 'Columna', 'Mensaje'];
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   constructor(public modalService: NgbModal,
               private httpCargaArchivo: CargaArchivoHttp,
@@ -19,16 +25,33 @@ export class CargaArchivoComponent implements OnInit {
   }
 
 
-
   ngOnInit(): void {
+
+  }
+
+  refresh(): void {
+    location.reload();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   open(content: any) {
-      this.modalService.open(content, {centered: true, ariaLabelledBy: 'modal-basic-title', backdrop: 'static'});
+    this.modalService.open(content, {centered: true, ariaLabelledBy: 'modal-basic-title', backdrop: 'static'});
   }
 
   onFileSelected(e: any): void {
-      this.file = e.target;
+    this.file = e.target;
+    this.tablaErrors = false;
   }
 
   subirArchivo(e: Event, content_mensaje: any): void {
@@ -38,12 +61,13 @@ export class CargaArchivoComponent implements OnInit {
         this.file = null;
         this.mensajeModal(content_mensaje, respuesta.message);
       }, (error) => {
-        console.log(error);
         this.error401(error, null);
-        if (error.status === 400 || error.status === 500) {
-          this.file = null;
-          this.mensaje = error.error.message;
-          this.open(content_mensaje);
+        if (error.status === 400) {
+          this.mensajeError(error, content_mensaje);
+          this.dataSource.data = error.error.object;
+          this.tablaErrors = true;
+        } else if (error.status === 500) {
+          this.mensajeError(error, content_mensaje);
         }
       })
     } else {
@@ -64,5 +88,11 @@ export class CargaArchivoComponent implements OnInit {
   mensajeModal(content: any, mensaje: string): void {
     this.open(content);
     this.mensaje = mensaje;
+  }
+
+  private mensajeError(error: any, content_mensaje: any): void {
+    this.file = null;
+    this.mensaje = error.error.message;
+    this.open(content_mensaje);
   }
 }

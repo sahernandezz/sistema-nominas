@@ -37,7 +37,9 @@ public class CargaArchivoServiceImpl {
         ObjectDto respuesta;
         List<ErrorParVal> listaErrores = new ArrayList<>();
         List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE);
-        if (!lista_ENCE.isEmpty()) {
+        if (lista_ENCE.isEmpty()) {
+            respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación la que no hay parámetros registrados");
+        } else {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet sheet = workbook.getSheetAt(0);
             listaErrores.addAll(this.tipo_ENCE(sheet, lista_ENCE));
@@ -45,8 +47,6 @@ public class CargaArchivoServiceImpl {
             respuesta = listaErrores.isEmpty()
                     ? new ObjectDto("El archivo no tiene inconsistencias")
                     : new ObjectDto(Optional.of(listaErrores), "Se detectaron inconsistencias en el archivo");
-        } else {
-            respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación la que no hay parámetros registrados");
         }
         return respuesta;
     }

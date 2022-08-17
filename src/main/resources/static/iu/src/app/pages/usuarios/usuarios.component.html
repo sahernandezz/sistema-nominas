@@ -14,7 +14,7 @@
   <!-- Table -->
   <div class="row">
     <div class="col">
-      <div class="card shadow">
+      <div class="card shadow pb-2">
         <div class="card-header border-0">
           <button class="btn btn-lg btn-outline-primary" (click)="openRegister(content_formulario)">Registrar Usuario
           </button>
@@ -126,25 +126,25 @@
 </ng-template>
 
 <ng-template #content_estado let-modal>
-  <div class="p-4 div-buscar d-flex mt-2">
+  <div class="p-4 div-buscar d-flex mt-2 text-center">
     <h1 class="text-gray">Cambiando estado...</h1>
   </div>
 </ng-template>
 
 <ng-template #content_estado_resultado let-modal>
-  <div class="p-4 div-buscar d-flex mt-2">
+  <div class="p-4 div-buscar d-flex mt-2 text-center">
     <h1 class="text-gray">{{this.mensaje}}</h1>
   </div>
 </ng-template>
 
 <ng-template #content_completado let-modal>
-  <div class="p-4 div-buscar d-flex mt-2">
+  <div class="p-4 div-buscar d-flex mt-2 text-center">
     <h1 class="text-gray">Usuario {{eventoUsuario['estado'] === 'R' ? 'registrado' : 'actualizado'}}</h1>
   </div>
 </ng-template>
 
 <ng-template #content_mensaje let-modal>
-  <div class="div-buscar mt-4 ml-4 mr-4">
+  <div class="div-buscar mt-4 ml-4 mr-4 text-center">
     <h1 class="text-gray">{{this.mensaje}}</h1>
   </div>
   <div class="div-buscar mb-4 ml-4 mr-4">
