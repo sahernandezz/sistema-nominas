@@ -9,4 +9,6 @@ public interface FormatoArchivoJpa extends JpaRepository<FormatoArchivo, Integer
     List<FormatoArchivo> findAllByEstado(String estado);
 
     FormatoArchivo findByDescripcion(String descripcion);
+
+    List<FormatoArchivo> findAllByOrderByEstadoAsc();
 }

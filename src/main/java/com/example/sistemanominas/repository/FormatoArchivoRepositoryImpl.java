@@ -20,7 +20,7 @@ public class FormatoArchivoRepositoryImpl {
     }
 
     public List<FormatoArchivo> lista(){
-        return this.jpaFormatoArchivo.findAll();
+        return this.jpaFormatoArchivo.findAllByOrderByEstadoAsc();
     }
 
     public Optional<FormatoArchivo> guardar(final FormatoArchivo f){

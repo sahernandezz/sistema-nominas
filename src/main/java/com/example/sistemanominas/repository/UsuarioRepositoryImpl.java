@@ -19,7 +19,7 @@ public class UsuarioRepositoryImpl {
     }
 
     public List<Usuario> lista() {
-        return this.jpa.findAll();
+        return this.jpa.findAllByOrderByEstadoAsc();
     }
 
     public Optional<Usuario> findByLogin(String login) {

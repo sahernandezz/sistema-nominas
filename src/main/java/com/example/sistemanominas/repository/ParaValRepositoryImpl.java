@@ -19,7 +19,7 @@ public class ParaValRepositoryImpl {
     }
 
     public List<ParaVal> lista() {
-        return this.jpa.findAll();
+        return this.jpa.findAllByOrderByEstadoAsc();
     }
 
     public Optional<ParaVal> paraValPorId(final Integer id) {
