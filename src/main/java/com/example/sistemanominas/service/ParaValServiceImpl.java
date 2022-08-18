@@ -28,8 +28,6 @@ public class ParaValServiceImpl {
             r.setColumna(r.getColumna().toUpperCase().trim());
         }
 
-        r.setValorPer(r.getValorPer().replace(" ", ""));
-
         if (respuesta == null) {
             Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
             respuesta = guardar.isPresent() ? new ObjectDto(guardar)
