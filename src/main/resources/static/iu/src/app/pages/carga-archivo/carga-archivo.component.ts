@@ -22,6 +22,7 @@ export class CargaArchivoComponent implements OnInit {
   constructor(public modalService: NgbModal,
               private httpCargaArchivo: CargaArchivoHttp,
               private router: Router) {
+    this.dataSource.data.length = 0;
   }
 
 
