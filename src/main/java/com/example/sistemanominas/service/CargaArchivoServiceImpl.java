@@ -87,14 +87,16 @@ public class CargaArchivoServiceImpl {
                 respuesta = this.validarString(x, p.getValorPer());
             }
             case ParaVal.NUMBER -> {
-                respuesta = this.validarNumeric(x.getCellType());
+                respuesta = this.validarNumeric(x, p.getValorPer());
             }
             case ParaVal.DATE -> {
                 respuesta = this.validarDate(x, p.getValorPer());
             }
             default -> {
-                if (x.getCellType().equals(CellType.BLANK)) {
-                    respuesta = "El campo esta vació";
+                if (!p.getValorPer().isEmpty()) {
+                    if (x.getCellType().equals(CellType.BLANK)) {
+                        respuesta = "El campo esta vació";
+                    }
                 }
             }
         }
@@ -110,13 +112,15 @@ public class CargaArchivoServiceImpl {
         String valorPermitido = "Valor no permitido debe ser (" + valorPer + ")";
         if (valor.getCellType().equals(CellType.STRING)) {
             if (valorPer.contains(",")) {
-                if (!Arrays.asList(valorPer.replace(" ", "").split(","))
-                        .contains(new DataFormatter().formatCellValue(valor).trim())) {
+                if (!Arrays.asList(valorPer.split(","))
+                        .contains(new DataFormatter().formatCellValue(valor).replace(" ", ""))) {
                     respuesta = valorPermitido;
                 }
             } else {
-                if (!valor.getStringCellValue().trim().equals(valorPer)) {
-                    respuesta = valorPermitido;
+                if (!valorPer.isEmpty()) {
+                    if (!valor.getStringCellValue().replace(" ", "").equals(valorPer)) {
+                        respuesta = valorPermitido;
+                    }
                 }
             }
         } else {
@@ -126,18 +130,31 @@ public class CargaArchivoServiceImpl {
         return respuesta;
     }
 
-    private String validarNumeric(final CellType valor) {
+    private String validarNumeric(final XSSFCell valor, String valorPer) {
         String respuesta = null;
-        if (!valor.equals(CellType.NUMERIC)) {
+        String valorPermitido = "Valor no permitido debe ser (" + valorPer + ")";
+
+        System.out.println(new DataFormatter().formatCellValue(valor)
+                .replace(" ", ""));
+
+        if (!valor.getCellType().equals(CellType.NUMERIC)) {
             respuesta = "El campo debe ser un número";
         }
+
+        if (!valorPer.isEmpty()) {
+            if (!new DataFormatter().formatCellValue(valor)
+                    .replace(" ", "").equals(valorPer)) {
+                respuesta = valorPermitido;
+            }
+        }
+
         return respuesta;
     }
 
     private String validarDate(final XSSFCell valor, String valorPer) {
         String respuesta = null;
         try {
-            new SimpleDateFormat(valorPer).parse(new DataFormatter().formatCellValue(valor).trim());
+            new SimpleDateFormat(valorPer).parse(new DataFormatter().formatCellValue(valor).replace(" ", ""));
         } catch (ParseException e) {
             respuesta = "El campo debe tener el formato " + valorPer;
         }

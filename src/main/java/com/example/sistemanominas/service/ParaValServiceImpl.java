@@ -28,6 +28,8 @@ public class ParaValServiceImpl {
             r.setColumna(r.getColumna().toUpperCase().trim());
         }
 
+        r.setValorPer(r.getValorPer().replace(" ", ""));
+
         if (respuesta == null) {
             Optional<ParaVal> guardar = this.paraValRepository.guardar(r);
             respuesta = guardar.isPresent() ? new ObjectDto(guardar)
@@ -49,9 +51,7 @@ public class ParaValServiceImpl {
             if (r.getCelda().isEmpty()) {
                 respuesta = new ObjectDto("El campo celda no puede estar vació");
             }
-//            if (!r.getColumna().isEmpty()) {
-//                respuesta = new ObjectDto("No se permite el ingreso de datos en el campo de la columna");
-//            }
+
         }
 
         try {
