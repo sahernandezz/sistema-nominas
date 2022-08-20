@@ -16,7 +16,7 @@ export class CargaArchivoComponent implements OnInit {
   file: any = null;
   tablaErrors: boolean = false;
   dataSource = new MatTableDataSource<ErrorArchivo>([]);
-  displayedColumns: string[] = ['Celda', 'Columna', 'Mensaje'];
+  displayedColumns: string[] = ['Celda', 'Columna', 'Error'];
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   constructor(public modalService: NgbModal,
