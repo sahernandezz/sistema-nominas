@@ -14,7 +14,7 @@
             <div class="text-muted mb-4">
               <small>Inicia sesión con credenciales</small>
             </div>
-            <form role="form" (ngSubmit)="datosUsuario()">
+            <form role="form" (ngSubmit)="datosUsuario(content_mensaje)">
               <div class="form-group mb-3" id="form-group_login_usuario">
                 <div class="input-group input-group-alternative d-flex">
                   <div class="input-group-prepend m-2 font-size-16">
@@ -60,3 +60,13 @@
     </div>
   </div>
 </div>
+
+<ng-template #content_mensaje let-modal>
+  <div class="div-buscar mt-4 ml-4 mr-4 text-center">
+    <h1 class="text-gray">{{this.mensaje}}</h1>
+  </div>
+  <div class="div-buscar mb-4 ml-4 mr-4">
+    <button (click)="modal.dismiss('Cross click')" type="button" class="btn btn-outline-default">Cerrar</button>
+  </div>
+</ng-template>
+

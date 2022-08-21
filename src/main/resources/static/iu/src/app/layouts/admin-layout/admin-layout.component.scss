@@ -2,18 +2,3 @@
   z-index: 1050 !important;
 }
 
-table {
-  width: 100%;
-}
-
-td, th {
-  min-width: calc(100vw / 8);
-  width: 25%;
-}
-
-.div-buscar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-

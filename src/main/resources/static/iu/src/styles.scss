@@ -32,7 +32,6 @@ $argon-dashboard-angular-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($argon-dashboard-angular-theme);
 
-
 html, body {
   height: 100%;
 }
