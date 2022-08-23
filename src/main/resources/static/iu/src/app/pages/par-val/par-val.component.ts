@@ -143,6 +143,7 @@ export class ParValComponent implements OnInit {
       {label: 'tipoDato', isRequired: true},
       {label: 'formatoArchivo', isRequired: true}
     ];
+
     for (const item of listaInput) {
       const input = document.getElementById(item.label) as HTMLInputElement || null;
       const from_group = document.getElementById('from_group_' + item.label) as HTMLInputElement || null;

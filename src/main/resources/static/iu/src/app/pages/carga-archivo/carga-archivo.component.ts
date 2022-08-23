@@ -17,12 +17,13 @@ export class CargaArchivoComponent implements OnInit {
   tablaErrors: boolean = false;
   dataSource = new MatTableDataSource<ErrorArchivo>([]);
   displayedColumns: string[] = ['Celda', 'Columna', 'Error'];
+  estadoLoad: boolean;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   constructor(public modalService: NgbModal,
               private httpCargaArchivo: CargaArchivoHttp,
               private router: Router) {
-    this.dataSource.data.length = 0;
+    this.estadoLoad = false;
   }
 
 
@@ -57,11 +58,15 @@ export class CargaArchivoComponent implements OnInit {
 
   subirArchivo(e: Event, content_mensaje: any): void {
     e.preventDefault();
+    const btn = document.getElementById('btn-subir') as HTMLInputElement || null;
     if (this.file != null) {
+      btn.disabled = true;
       this.httpCargaArchivo.guardarValidacionArchivo(this.file.files[0]).subscribe((respuesta) => {
         this.file = null;
+        btn.disabled = false;
         this.mensajeModal(content_mensaje, respuesta.message);
       }, (error) => {
+        btn.disabled = false;
         this.error401(error, null);
         if (error.status === 400) {
           this.mensajeError(error, content_mensaje);

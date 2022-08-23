@@ -20,7 +20,7 @@
                  required>
           <div class="div-buscar pt-4">
             <input class="btn btn-primary" type="submit"
-                   value="Subir">
+                   value="Subir" id="btn-subir">
           </div>
         </form>
       </div>
@@ -97,10 +97,6 @@
   </div>
 </div>
 
-<ng-template>
-
-</ng-template>
-
 <ng-template #content_mensaje let-modal>
   <div class="div-buscar mt-4 ml-4 mr-4 text-center">
     <h1 class="text-gray">{{this.mensaje}}</h1>
@@ -109,4 +105,3 @@
     <button (click)="modal.dismiss('Cross click')" type="button" class="btn btn-outline-default">Cerrar</button>
   </div>
 </ng-template>
-

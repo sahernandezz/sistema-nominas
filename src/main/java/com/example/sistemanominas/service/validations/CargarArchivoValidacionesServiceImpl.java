@@ -3,6 +3,7 @@ package com.example.sistemanominas.service.validations;
 import com.example.sistemanominas.component.ExcelMetodosComponent;
 import com.example.sistemanominas.dto.ErrorParVal;
 import com.example.sistemanominas.model.ParaVal;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -25,36 +26,58 @@ public class CargarArchivoValidacionesServiceImpl {
     public List<ErrorParVal> validarPorTipo(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo) {
         List<ErrorParVal> listaErrores = new ArrayList<>();
         if (!lista.isEmpty()) {
+            this.prueValidation(sheet);
             lista.forEach(paraVal -> {
-                ErrorParVal error = this.validarCampo(
-                        sheet.getRow(Integer.parseInt(paraVal.getCelda()) - 1)
-                                .getCell(this.componentExcel.obtenerIndiceColumna(paraVal.getColumna(),
-                                ExcelMetodosComponent.LETRAS, 0, 0)), paraVal, tipo
-                );
-                if (error != null) {
-                    listaErrores.add(error);
+                try {
+                    ErrorParVal error = this.validarCampo(
+                            sheet.getRow(Integer.parseInt(paraVal.getCelda()) - 1)
+                                    .getCell(this.componentExcel.obtenerIndiceColumna(paraVal.getColumna())),
+                            paraVal, tipo);
+
+                    if (error != null) {
+                        listaErrores.add(error);
+                    }
+                } catch (Exception e) {
+                    listaErrores.add(this.nuevoErrorParVal(
+                            tipo, paraVal, "Verifique la información de la validación"));
                 }
             });
         }
         return listaErrores;
     }
 
+    private void prueValidation(final XSSFSheet sheet) {
+        for (int i = 6; i < sheet.getPhysicalNumberOfRows(); i++) {
+            Cell cell = sheet.getRow(i).getCell(1);
+            String valor = new DataFormatter().formatCellValue(cell);
+
+            System.out.println(
+                    valor.isEmpty() ? "Campo vació " +
+                            this.componentExcel.obtenerLetraColumna(1) + " " + (i + 1) : valor
+            );
+        }
+    }
+
     private ErrorParVal validarCampo(final XSSFCell x, final ParaVal p, final String tipo) {
         Object respuesta = null;
-        switch (p.getTipoDato()) {
-            case ParaVal.STRING -> {
-                respuesta = this.validarString(x, p.getValorPer());
+        try {
+            switch (p.getTipoDato()) {
+                case ParaVal.STRING -> {
+                    respuesta = this.validarString(x, p.getValorPer());
+                }
+                case ParaVal.NUMBER -> {
+                    respuesta = this.validarNumeric(x, p.getValorPer());
+                }
+                case ParaVal.DATE -> {
+                    respuesta = this.validarDate(x, p.getValorPer());
+                }
             }
-            case ParaVal.NUMBER -> {
-                respuesta = this.validarNumeric(x, p.getValorPer());
-            }
-            case ParaVal.DATE -> {
-                respuesta = this.validarDate(x, p.getValorPer());
-            }
-        }
 
-        if (respuesta != null) {
-            respuesta = this.nuevoErrorParVal(tipo, p, respuesta.toString());
+            if (respuesta != null) {
+                respuesta = this.nuevoErrorParVal(tipo, p, respuesta.toString());
+            }
+        } catch (Exception e) {
+            respuesta = this.nuevoErrorParVal(tipo, p, "Hay problemas al verificar este campo");
         }
         return (ErrorParVal) respuesta;
     }
@@ -63,9 +86,7 @@ public class CargarArchivoValidacionesServiceImpl {
         String respuesta = null;
         String valorPermitido = "Valor no permitido debe ser (" + valorPer + ")";
         if (new DataFormatter().formatCellValue(valor).isEmpty()) {
-            if (valorPer != null) {
-                respuesta = valorPermitido;
-            }
+            respuesta = "El campo esta vació";
         } else {
             if (!valor.getCellType().equals(CellType.STRING)) {
                 respuesta = "El valor no es texto";
