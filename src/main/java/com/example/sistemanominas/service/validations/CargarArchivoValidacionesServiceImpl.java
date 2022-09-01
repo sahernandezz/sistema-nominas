@@ -3,6 +3,7 @@ package com.example.sistemanominas.service.validations;
 import com.example.sistemanominas.component.ExcelMetodosComponent;
 import com.example.sistemanominas.dto.ErrorParVal;
 import com.example.sistemanominas.dto.DataFormatterSinglenton;
+import com.example.sistemanominas.model.FormatoArchivo;
 import com.example.sistemanominas.model.ParaVal;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -23,7 +24,7 @@ public class CargarArchivoValidacionesServiceImpl {
     @Autowired
     private ExcelMetodosComponent componentExcel;
 
-    public List<ErrorParVal> validarPorTipo(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo) {
+    public List<ErrorParVal> validarPorTipo(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo, final String fomato) {
         List<ErrorParVal> listaErrores = new ArrayList<>();
         if (!lista.isEmpty()) {
             lista.forEach(paraVal -> {
@@ -31,21 +32,21 @@ public class CargarArchivoValidacionesServiceImpl {
                     ErrorParVal error = this.validarCampo(
                             sheet.getRow(Integer.parseInt(paraVal.getCelda()) - 1)
                                     .getCell(this.componentExcel.obtenerIndiceColumna(paraVal.getColumna())),
-                            paraVal, tipo);
+                            paraVal, tipo, fomato);
 
                     if (error != null) {
                         listaErrores.add(error);
                     }
                 } catch (Exception e) {
                     listaErrores.add(this.nuevoErrorParVal(
-                            tipo, paraVal, "Verifique la información de la validación"));
+                            tipo, paraVal, "Verifique la información de la validación", fomato));
                 }
             });
         }
         return listaErrores;
     }
 
-    public List<ErrorParVal> validarRegistros(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo) {
+    public List<ErrorParVal> validarRegistros(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo, final String formato) {
         List<ErrorParVal> listaErrores = new ArrayList<>();
         if (!lista.isEmpty()) {
             lista.forEach(paraVal -> {
@@ -57,25 +58,25 @@ public class CargarArchivoValidacionesServiceImpl {
                             ParaVal paraVal2 = paraVal;
                             paraVal2.setCelda(String.valueOf(i + 1));
                             paraVal2.setValorPer(null);
-                            ErrorParVal error = this.validarCampo(sheet.getRow(i).getCell(celda), paraVal2, tipo);
+                            ErrorParVal error = this.validarCampo(sheet.getRow(i).getCell(celda), paraVal2, tipo, formato);
                             if (error != null) {
                                 listaErrores.add(error);
                             }
                         });
                     } else {
                         listaErrores.add(this.nuevoErrorParVal(tipo, paraVal, validarEncabezado
-                                + " Por tanto no se puede hacer La validación de la columna (" + paraVal.getColumna() + ")"));
+                                + " Por tanto no se puede hacer La validación de la columna (" + paraVal.getColumna() + ")", formato));
                     }
                 } catch (Exception e) {
                     listaErrores.add(this.nuevoErrorParVal(
-                            tipo, paraVal, "Verifique la información de la validación"));
+                            tipo, paraVal, "Verifique la información de la validación", formato));
                 }
             });
         }
         return listaErrores;
     }
 
-    private ErrorParVal validarCampo(final XSSFCell x, final ParaVal p, final String tipo) {
+    private ErrorParVal validarCampo(final XSSFCell x, final ParaVal p, final String tipo, final String formato) {
         Object respuesta = null;
         try {
             switch (p.getTipoDato()) {
@@ -91,10 +92,10 @@ public class CargarArchivoValidacionesServiceImpl {
             }
 
             if (respuesta != null) {
-                respuesta = this.nuevoErrorParVal(tipo, p, respuesta.toString());
+                respuesta = this.nuevoErrorParVal(tipo, p, respuesta.toString(), formato);
             }
         } catch (Exception e) {
-            respuesta = this.nuevoErrorParVal(tipo, p, "Hay problemas al verificar este campo");
+            respuesta = this.nuevoErrorParVal(tipo, p, "Hay problemas al verificar este campo", formato);
         }
         return (ErrorParVal) respuesta;
     }
@@ -158,12 +159,13 @@ public class CargarArchivoValidacionesServiceImpl {
         return respuesta;
     }
 
-    private ErrorParVal nuevoErrorParVal(final String tipo, final ParaVal p, final String mensaje) {
+    private ErrorParVal nuevoErrorParVal(final String tipo, final ParaVal p, final String mensaje, final String formato) {
         ErrorParVal error = new ErrorParVal();
         error.setColumna(p.getColumna());
         error.setCelda(p.getCelda());
         error.setTipo(tipo);
         error.setMensaje(mensaje);
+        error.setFormato(formato);
         return error;
     }
 }

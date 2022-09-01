@@ -7,11 +7,11 @@ import {AppComponent} from '../../app.component';
   providedIn: 'root'
 })
 
-export class FormularioArchivoHttp {
+export class FormatoArchivoHttp {
   app: AppComponent;
   url: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private httpFormulario: FormatoArchivoHttp) {
     this.app = new AppComponent();
     this.url = '/formato-archivo/api/v1';
   }

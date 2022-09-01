@@ -18,6 +18,16 @@
           <input class="input-file" value="{{this.file}}" type="file" accept="application/vnd.ms-excel,
           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" (change)="this.onFileSelected($event)"
                  required>
+          <div class="form-group col-md-12 mt-3">
+            <select class="form-control" id="formatoArchivo">
+              <option value="null">Seleccióne el formato...</option>
+              <option
+                *ngFor="let formatoArchivo of this.listaFormatos"
+                value="{{this.parse(formatoArchivo)}}">{{formatoArchivo.descripcion}}
+              </option>
+            </select>
+            <span class="text-red font-size-12" id="text_formatoArchivo"></span>
+          </div>
           <div class="div-buscar pt-4">
             <input class="btn btn-primary" type="submit"
                    value="Subir" id="btn-subir">
@@ -47,7 +57,9 @@
                   <div _ngcontent-c9="" class="row">
                     <div _ngcontent-c9="" class="col"><h5 _ngcontent-c9=""
                                                           class="card-title text-uppercase text-muted mb-0">
-                      Registros</h5><span _ngcontent-c9="" class="h2 font-weight-bold mb-0">{{this.informe.cantidadRegistros}}</span></div>
+                      Registros</h5><span _ngcontent-c9=""
+                                          class="h2 font-weight-bold mb-0">{{this.informe.cantidadRegistros}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -59,7 +71,8 @@
                     <div _ngcontent-c9="" class="col"><h5 _ngcontent-c9=""
                                                           class="card-title text-uppercase text-muted mb-0">Registros
                       Validos</h5>
-                      <span _ngcontent-c9="" class="h2 font-weight-bold mb-0">{{this.informe.cantidadRegistrosValidados}}</span></div>
+                      <span _ngcontent-c9=""
+                            class="h2 font-weight-bold mb-0">{{this.informe.cantidadRegistrosValidados}}</span></div>
                   </div>
                 </div>
               </div>

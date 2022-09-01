@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../app.component';
 import {ParaValHttp} from '../../shared/services/ParaVal';
-import {FormularioArchivoHttp} from '../../shared/services/FormularioArchivo';
+import {FormatoArchivoHttp} from '../../shared/services/FormatoArchivo';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
@@ -30,7 +30,7 @@ export class ParValComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   constructor(public modalService: NgbModal, private httpParVal: ParaValHttp,
-              private httpFormulario: FormularioArchivoHttp,
+              private httpFormatoArchivo: FormatoArchivoHttp,
               public app: AppComponent, private router: Router) {
     this.formatos = this.getFormatos();
   }
@@ -105,7 +105,7 @@ export class ParValComponent implements OnInit {
 
   getFormatos(): FormatoArchivo[] {
     const lista = [];
-    this.httpFormulario.listaFormulariosActivos().subscribe(data => {
+    this.httpFormatoArchivo.listaFormulariosActivos().subscribe(data => {
       lista.push(...data);
     }, (error) => {
       if (error.status === 401) {

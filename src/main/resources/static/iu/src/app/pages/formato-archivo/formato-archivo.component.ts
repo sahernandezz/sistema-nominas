@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../app.component';
-import {FormularioArchivoHttp} from '../../shared/services/FormularioArchivo';
+import {FormatoArchivoHttp} from '../../shared/services/FormatoArchivo';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
@@ -22,7 +22,7 @@ export class FormatoArchivoComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-  constructor(public modalService: NgbModal, private httpFormulario: FormularioArchivoHttp,
+  constructor(public modalService: NgbModal, private httpFormulario: FormatoArchivoHttp,
               public app: AppComponent, private router: Router) {
   }
 

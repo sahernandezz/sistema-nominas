@@ -3,4 +3,5 @@ interface ErrorArchivo {
   columna: string;
   mensaje: string;
   tipo: string;
+  formato: string;
 }

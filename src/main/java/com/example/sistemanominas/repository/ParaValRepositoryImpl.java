@@ -1,5 +1,6 @@
 package com.example.sistemanominas.repository;
 
+import com.example.sistemanominas.model.FormatoArchivo;
 import com.example.sistemanominas.model.ParaVal;
 import com.example.sistemanominas.repository.jpa.ParaValJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ParaValRepositoryImpl {
         return this.jpa.findById(id);
     }
 
-    public List<ParaVal> lista(final String tipo) {
-        return this.jpa.findAllByTipoAndEstadoOrderById(tipo, ParaVal.ACTIVO);
+    public List<ParaVal> lista(final String tipo, final FormatoArchivo formato) {
+        return this.jpa.findAllByTipoAndEstadoAndFormatoArchivoOrderById(tipo, ParaVal.ACTIVO, formato);
     }
 }

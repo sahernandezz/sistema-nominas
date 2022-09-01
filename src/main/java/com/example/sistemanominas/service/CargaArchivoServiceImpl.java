@@ -4,8 +4,10 @@ import com.example.sistemanominas.dto.ErrorParVal;
 import com.example.sistemanominas.dto.InformeCargarArchivo;
 import com.example.sistemanominas.dto.ObjectDto;
 import com.example.sistemanominas.model.CargaArchivo;
+import com.example.sistemanominas.model.FormatoArchivo;
 import com.example.sistemanominas.model.ParaVal;
 import com.example.sistemanominas.repository.CargaArchivoRepositoryImpl;
+import com.example.sistemanominas.repository.FormatoArchivoRepositoryImpl;
 import com.example.sistemanominas.repository.ParaValRepositoryImpl;
 import com.example.sistemanominas.service.validations.CargarArchivoValidacionesServiceImpl;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -27,39 +29,46 @@ public class CargaArchivoServiceImpl {
     private CargaArchivoRepositoryImpl cargaArchivoRepository;
 
     @Autowired
+    private FormatoArchivoRepositoryImpl formatoArchivoRepository;
+
+    @Autowired
     private ParaValRepositoryImpl paraValRepository;
 
     @Autowired
     private CargarArchivoValidacionesServiceImpl validacionesCargarArchivo;
 
 
-    public ObjectDto validarArchivo(final MultipartFile file, final String nombreUsuario) throws IOException {
+    public ObjectDto validarArchivo(final MultipartFile file, final String nombreUsuario, final Integer id) throws IOException {
         ObjectDto respuesta;
         List<ErrorParVal> listaErrores = new ArrayList<>();
+        Optional<FormatoArchivo> formatoArchivo = this.formatoArchivoRepository.formatoArchivoPorId(id);
+        if (formatoArchivo.isPresent()) {
+            List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE, formatoArchivo.get());
+            List<ParaVal> lista_ENCD = this.paraValRepository.lista(ParaVal.ENCD, formatoArchivo.get());
 
-        List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE);
-        List<ParaVal> lista_ENCD = this.paraValRepository.lista(ParaVal.ENCD);
+            if (lista_ENCE.size() + lista_ENCD.size() == 0) {
+                respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación ya que no hay parámetros registrados");
+            } else {
+                XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+                XSSFSheet sheet = workbook.getSheetAt(0);
 
-        if (lista_ENCE.size() + lista_ENCD.size() == 0) {
-            respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación ya que no hay parámetros registrados");
-        } else {
-            XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet sheet = workbook.getSheetAt(0);
+                listaErrores.addAll(this.validacionesCargarArchivo.validarPorTipo(sheet, lista_ENCE, ParaVal.ENCE, formatoArchivo.get().getDescripcion()));
+                listaErrores.addAll(this.validacionesCargarArchivo.validarRegistros(sheet, lista_ENCD, ParaVal.ENCD, formatoArchivo.get().getDescripcion()));
 
-            listaErrores.addAll(this.validacionesCargarArchivo.validarPorTipo(sheet, lista_ENCE, ParaVal.ENCE));
-            listaErrores.addAll(this.validacionesCargarArchivo.validarRegistros(sheet, lista_ENCD, ParaVal.ENCD));
+                int totalRegistros = sheet.getPhysicalNumberOfRows() - 6;
+                int numeroRegistrosValidos = totalRegistros;
 
-            int numeroRegistrosValidos = 0;
-            int totalRegistros = sheet.getPhysicalNumberOfRows() - 6;
+                if (!listaErrores.isEmpty() && !lista_ENCD.isEmpty()) {
+                    numeroRegistrosValidos = this.cantidadRegistrosValidos(listaErrores, totalRegistros, ParaVal.ENCD);
+                }
 
-            if (!listaErrores.isEmpty() && !lista_ENCD.isEmpty()) {
-                numeroRegistrosValidos = this.cantidadRegistrosValidos(listaErrores, totalRegistros, ParaVal.ENCD);
+                this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size(), totalRegistros, numeroRegistrosValidos);
+                respuesta = listaErrores.isEmpty()
+                        ? new ObjectDto("El archivo no tiene inconsistencias")
+                        : new ObjectDto(Optional.of(this.informe(listaErrores, totalRegistros, numeroRegistrosValidos)), "Se detectaron inconsistencias en el archivo");
             }
-
-            this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size(), totalRegistros, numeroRegistrosValidos);
-            respuesta = listaErrores.isEmpty()
-                    ? new ObjectDto("El archivo no tiene inconsistencias")
-                    : new ObjectDto(Optional.of(this.informe(listaErrores, totalRegistros, numeroRegistrosValidos)), "Se detectaron inconsistencias en el archivo");
+        } else {
+            respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación ya que no hay formato registrado");
         }
         return respuesta;
     }
