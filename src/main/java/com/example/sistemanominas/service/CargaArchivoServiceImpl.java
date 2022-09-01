@@ -1,6 +1,7 @@
 package com.example.sistemanominas.service;
 
 import com.example.sistemanominas.dto.ErrorParVal;
+import com.example.sistemanominas.dto.InformeCargarArchivo;
 import com.example.sistemanominas.dto.ObjectDto;
 import com.example.sistemanominas.model.CargaArchivo;
 import com.example.sistemanominas.model.ParaVal;
@@ -15,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Service
@@ -35,29 +38,66 @@ public class CargaArchivoServiceImpl {
         List<ErrorParVal> listaErrores = new ArrayList<>();
 
         List<ParaVal> lista_ENCE = this.paraValRepository.lista(ParaVal.ENCE);
+        List<ParaVal> lista_ENCD = this.paraValRepository.lista(ParaVal.ENCD);
 
-        if (lista_ENCE.size() == 0) {
+        if (lista_ENCE.size() + lista_ENCD.size() == 0) {
             respuesta = new ObjectDto(Optional.of(listaErrores), "No se puede hacer la validación ya que no hay parámetros registrados");
         } else {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             listaErrores.addAll(this.validacionesCargarArchivo.validarPorTipo(sheet, lista_ENCE, ParaVal.ENCE));
+            listaErrores.addAll(this.validacionesCargarArchivo.validarRegistros(sheet, lista_ENCD, ParaVal.ENCD));
 
-            this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size());
+            int numeroRegistrosValidos = 0;
+            int totalRegistros = sheet.getPhysicalNumberOfRows() - 6;
+
+            if (!listaErrores.isEmpty() && !lista_ENCD.isEmpty()) {
+                numeroRegistrosValidos = this.cantidadRegistrosValidos(listaErrores, totalRegistros, ParaVal.ENCD);
+            }
+
+            this.guardarValidacion(file.getOriginalFilename(), nombreUsuario, listaErrores.size(), totalRegistros, numeroRegistrosValidos);
             respuesta = listaErrores.isEmpty()
                     ? new ObjectDto("El archivo no tiene inconsistencias")
-                    : new ObjectDto(Optional.of(listaErrores), "Se detectaron inconsistencias en el archivo");
+                    : new ObjectDto(Optional.of(this.informe(listaErrores, totalRegistros, numeroRegistrosValidos)), "Se detectaron inconsistencias en el archivo");
         }
         return respuesta;
     }
 
-    private Optional<CargaArchivo> guardarValidacion(final String fileName, final String username, final int errores) {
+    private Optional<CargaArchivo> guardarValidacion(final String fileName, final String username,
+                                                     final int errores, final int registros, final int registrosValidos) {
         CargaArchivo cargaArchivo = new CargaArchivo();
         cargaArchivo.setDescripcion(fileName);
         cargaArchivo.setLoginUsuario(username);
+        cargaArchivo.setTRegistros(registros);
+        cargaArchivo.setRValidos(registrosValidos);
         cargaArchivo.setContErrores(errores);
         cargaArchivo.setFecha(new Date());
         return this.cargaArchivoRepository.guardar(cargaArchivo);
+    }
+
+    private InformeCargarArchivo informe(final List<ErrorParVal> listaErrores, final int cantidadRegistros,
+                                         final int cantidadRegistrosValidados) {
+        InformeCargarArchivo informe = new InformeCargarArchivo();
+        informe.setListaErrores(listaErrores);
+        informe.setCantidadErrores(listaErrores.size());
+        informe.setCantidadRegistros(cantidadRegistros);
+        informe.setCantidadRegistrosValidados(cantidadRegistrosValidados);
+        return informe;
+    }
+
+    private int cantidadRegistrosValidos(final List<ErrorParVal> listaErrores, final int totalRegistros, final String tipo) {
+        int registrosValidos;
+        List<ErrorParVal> lista = listaErrores.stream().filter(error -> error.getTipo().equals(tipo)).toList();
+        if (!lista.isEmpty()) {
+            List<String> count = new ArrayList<>();
+            IntStream.range(0, lista.size()).filter(i ->
+                    !count.contains(lista.get(i).getCelda())).forEach(i ->
+                    count.add(lista.get(i).getCelda()));
+            registrosValidos = totalRegistros - count.size();
+        } else {
+            registrosValidos = totalRegistros;
+        }
+        return registrosValidos;
     }
 }

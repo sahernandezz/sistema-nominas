@@ -16,6 +16,7 @@ export class CargaArchivoComponent implements OnInit {
   file: any = null;
   tablaErrors: boolean = false;
   dataSource = new MatTableDataSource<ErrorArchivo>([]);
+  informe: InformeCargarArchivo;
   displayedColumns: string[] = ['Celda', 'Columna', 'Error'];
   estadoLoad: boolean;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -70,7 +71,12 @@ export class CargaArchivoComponent implements OnInit {
         this.error401(error, null);
         if (error.status === 400) {
           this.mensajeError(error, content_mensaje);
-          this.dataSource.data = error.error.object;
+          this.dataSource.data = error.error.object.listaErrores;
+          this.informe = {
+            cantidadErrores: error.error.object.cantidadErrores,
+            cantidadRegistros: error.error.object.cantidadRegistros,
+            cantidadRegistrosValidados: error.error.object.cantidadRegistrosValidados
+          };
           this.tablaErrors = true;
         } else if (error.status === 500) {
           this.mensajeError(error, content_mensaje);

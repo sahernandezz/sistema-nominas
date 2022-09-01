@@ -2,10 +2,9 @@ package com.example.sistemanominas.service.validations;
 
 import com.example.sistemanominas.component.ExcelMetodosComponent;
 import com.example.sistemanominas.dto.ErrorParVal;
+import com.example.sistemanominas.dto.DataFormatterSinglenton;
 import com.example.sistemanominas.model.ParaVal;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 public class CargarArchivoValidacionesServiceImpl {
@@ -26,7 +26,6 @@ public class CargarArchivoValidacionesServiceImpl {
     public List<ErrorParVal> validarPorTipo(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo) {
         List<ErrorParVal> listaErrores = new ArrayList<>();
         if (!lista.isEmpty()) {
-            this.prueValidation(sheet);
             lista.forEach(paraVal -> {
                 try {
                     ErrorParVal error = this.validarCampo(
@@ -46,16 +45,34 @@ public class CargarArchivoValidacionesServiceImpl {
         return listaErrores;
     }
 
-    private void prueValidation(final XSSFSheet sheet) {
-        for (int i = 6; i < sheet.getPhysicalNumberOfRows(); i++) {
-            Cell cell = sheet.getRow(i).getCell(1);
-            String valor = new DataFormatter().formatCellValue(cell);
-
-            System.out.println(
-                    valor.isEmpty() ? "Campo vació " +
-                            this.componentExcel.obtenerLetraColumna(1) + " " + (i + 1) : valor
-            );
+    public List<ErrorParVal> validarRegistros(final XSSFSheet sheet, final List<ParaVal> lista, final String tipo) {
+        List<ErrorParVal> listaErrores = new ArrayList<>();
+        if (!lista.isEmpty()) {
+            lista.forEach(paraVal -> {
+                try {
+                    Integer celda = this.componentExcel.obtenerIndiceColumna(paraVal.getColumna());
+                    String validarEncabezado = this.validarString(sheet.getRow(5).getCell(celda), paraVal.getValorPer());
+                    if (validarEncabezado == null) {
+                        IntStream.range(6, sheet.getPhysicalNumberOfRows()).forEach(i -> {
+                            ParaVal paraVal2 = paraVal;
+                            paraVal2.setCelda(String.valueOf(i + 1));
+                            paraVal2.setValorPer(null);
+                            ErrorParVal error = this.validarCampo(sheet.getRow(i).getCell(celda), paraVal2, tipo);
+                            if (error != null) {
+                                listaErrores.add(error);
+                            }
+                        });
+                    } else {
+                        listaErrores.add(this.nuevoErrorParVal(tipo, paraVal, validarEncabezado
+                                + " Por tanto no se puede hacer La validación de la columna (" + paraVal.getColumna() + ")"));
+                    }
+                } catch (Exception e) {
+                    listaErrores.add(this.nuevoErrorParVal(
+                            tipo, paraVal, "Verifique la información de la validación"));
+                }
+            });
         }
+        return listaErrores;
     }
 
     private ErrorParVal validarCampo(final XSSFCell x, final ParaVal p, final String tipo) {
@@ -85,7 +102,7 @@ public class CargarArchivoValidacionesServiceImpl {
     private String validarString(final XSSFCell valor, final String valorPer) {
         String respuesta = null;
         String valorPermitido = "Valor no permitido debe ser (" + valorPer + ")";
-        if (new DataFormatter().formatCellValue(valor).isEmpty()) {
+        if (DataFormatterSinglenton.getInstance().formatCellValue(valor).isEmpty()) {
             respuesta = "El campo esta vació";
         } else {
             if (!valor.getCellType().equals(CellType.STRING)) {
@@ -98,7 +115,7 @@ public class CargarArchivoValidacionesServiceImpl {
                         }
                     } else {
                         if (!Arrays.asList(valorPer.replace(" ", "").split(","))
-                                .contains(new DataFormatter().formatCellValue(valor).replace(" ", ""))) {
+                                .contains(DataFormatterSinglenton.getInstance().formatCellValue(valor).replace(" ", ""))) {
                             respuesta = valorPermitido;
                         }
                     }
@@ -112,7 +129,7 @@ public class CargarArchivoValidacionesServiceImpl {
     private String validarNumeric(final XSSFCell valor, final String valorPer) {
         String respuesta = null;
 
-        String valorString = new DataFormatter().formatCellValue(valor)
+        String valorString = DataFormatterSinglenton.getInstance().formatCellValue(valor)
                 .replace(" ", "");
 
         try {
@@ -133,7 +150,7 @@ public class CargarArchivoValidacionesServiceImpl {
     private String validarDate(final XSSFCell valor, final String valorPer) {
         String respuesta = null;
         try {
-            new SimpleDateFormat(valorPer).parse(new DataFormatter().formatCellValue(valor).replace(" ", ""));
+            new SimpleDateFormat(valorPer).parse(DataFormatterSinglenton.getInstance().formatCellValue(valor).replace(" ", ""));
         } catch (ParseException e) {
             respuesta = "El campo debe tener el formato " + valorPer;
         }
