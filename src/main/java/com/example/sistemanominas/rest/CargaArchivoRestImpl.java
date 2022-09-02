@@ -38,7 +38,6 @@ public class CargaArchivoRestImpl {
                 respuesta = new ResponseEntity<>(Map.of("message", "El formato no esta soportado solo se permiten (xlsx, xls)"), HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             respuesta = new ResponseEntity<>(Map.of("message", "Ocurrió un error :("), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return respuesta;

@@ -10,10 +10,10 @@ public class ParaValidacionesServiceImpl {
     public ObjectDto validacionesGuardarParaVal(final ParaVal r) {
         String respuesta = null;
 
-        if (r.getTipo().equals(ParaVal.ENCE) || r.getTipo().equals(ParaVal.ENCD)) {
-            if (r.getCelda().isEmpty()) {
-                respuesta = "El campo celda no puede estar vació";
-            }
+        if (r.getCelda().isEmpty()) {
+            respuesta = "El campo celda no puede estar vació";
+        } else if (r.getColumna().isEmpty()) {
+            respuesta = "El campo colimna no puede estar vació";
         }
 
         try {
@@ -21,6 +21,7 @@ public class ParaValidacionesServiceImpl {
         } catch (NumberFormatException e) {
             respuesta = "Solo se permiten números en el campo celda";
         }
+
         if (r.getColumna().matches("-?\\d+(\\.\\d+)?")) {
             respuesta = "No se permiten números en el campo columna";
         } else if (r.getColumna().length() > 2) {
