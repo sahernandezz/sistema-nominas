@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       group_clave.classList.add('has-danger');
 
       if (error.status === 0 || error.status === 500) {
-        this.mensajeModal(modalMensaje, "Hay inconvenientes intente nuevamente más tarde");
+        this.mensajeModal(modalMensaje, "Hay inconvenientes, intente nuevamente más tarde");
       }
     });
   }

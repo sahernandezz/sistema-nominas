@@ -1,6 +1,6 @@
 {
-  "name": "argon-dashboard-angular",
-  "version": "1.4.0",
+  "name": "iu",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
