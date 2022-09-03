@@ -23,9 +23,8 @@ public class ExcelMetodosComponent {
                 }
             }
             return this.obtenerIndiceColumna(columna,
-                    range(0, letras.length).mapToObj(i ->
-                            LETRAS[letraLen] + LETRAS[i]
-                    ).toArray(String[]::new), n, letraLen + 1);
+                    range(0, letras.length).mapToObj(i -> LETRAS[letraLen] + LETRAS[i]).toArray(String[]::new),
+                    n, letraLen + 1);
         } catch (Exception e) {
             return null;
         }

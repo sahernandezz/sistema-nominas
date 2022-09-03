@@ -136,7 +136,7 @@ export class ParValComponent implements OnInit {
     let i = 0;
     const listaInput = [
       {label: 'celda', isRequired: true},
-      {label: 'columna', isRequired: false},
+      {label: 'columna', isRequired: true},
       {label: 'valorPer', isRequired: false},
       {label: 'expreSql', isRequired: false},
       {label: 'tipo', isRequired: true},

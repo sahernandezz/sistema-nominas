@@ -65,8 +65,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(
                         (request) -> request
                                 .antMatchers("/auth/api/v1/*", "/", "/assets/*").permitAll()
-                                .antMatchers("/carga-archivo/api/v1/validar/*", "/formato-archivo/api/v1/lista/activos").hasAuthority("usuario operativo")
+                                .antMatchers("/carga-archivo/api/v1/validar/*").hasAuthority("usuario operativo")
+                                .antMatchers("/formato-archivo/api/v1/lista/activos").authenticated()
                                 .antMatchers("/**").hasAuthority("administrador")
+                                .antMatchers("/formato-archivo/api/v1/lista/activos").authenticated()
                                 .anyRequest().fullyAuthenticated()
                 )
 

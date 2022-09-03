@@ -18,6 +18,7 @@ public class FormatoArchivoServiceImpl {
     public ObjectDto guardarFormatoArchivo(final FormatoArchivo f) {
         ObjectDto respuesta;
         if (this.formatoArchivoRepository.findByDescripcion(f.getDescripcion()).isEmpty()) {
+            f.setDescripcion(f.getDescripcion().toUpperCase());
             Optional<FormatoArchivo> guardar = this.formatoArchivoRepository.guardar(f);
             respuesta = guardar.isPresent() ? new ObjectDto(guardar)
                     : new ObjectDto("No se pudo guardar");

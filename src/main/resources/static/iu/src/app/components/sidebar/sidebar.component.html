@@ -39,7 +39,7 @@
         <div class="row">
           <div class="col-6 collapse-brand">
             <a routerLinkActive="active" [routerLink]="['/dashboard']">
-              <h1 class="title">Sistema</h1>
+              <h1 class="title">{{app.getConfig().title}}</h1>
             </a>
           </div>
           <div class="col-6 collapse-close">
